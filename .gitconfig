@@ -74,6 +74,11 @@
 	# Detect whitespace errors when applying a patch
 	whitespace = fix
 
+[credential]
+
+	#  See https://help.github.com/articles/caching-your-github-password-in-git/
+	helper = osxkeychain
+
 [core]
 
 	# Use custom `.gitignore` and `.gitattributes`
