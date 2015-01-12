@@ -128,7 +128,7 @@
 [difftool "bcomp"]
 
 	trustExitCode = true
-	cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE"
+	cmd = "/usr/local/bin/bcompare" "$LOCAL" "$REMOTE"
 
 [difftool]
 
