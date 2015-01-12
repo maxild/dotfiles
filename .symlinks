@@ -1,3 +1,37 @@
+dotfiles="$HOME/Projects/dotfiles"
+sublimeExe='/Application/Sublime Text.app/Contents/SharedSupport/bin/subl'
+sublimeUserDir="$HOME/Library/Application Support/Sublime Text 3/Packages/User"
+
+link() {
+  from="$1"
+  to="$2"
+  echo "Symlink '$from' to '$to'"
+  rm -f "$to"
+  ln -s "$from" "$to"
+}
+
+force_link() {
+  from="$1"
+  to="$2"
+  echo "Symlink '$from' to '$to'"
+  rm -rf "$to"
+  ln -s "$from" "$to"
+}
+
 # Set symlink for Sublime Text
-[[ ! -e '/Application/Sublime Text.app/Contents/SharedSupport/bin/subl' ]] &&
-[[ ! -e ~/bin/subl ]] && ln -s '/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl' ~/bin/subl;
+[[ -e sublimeExe ]] &&
+link sublimeExe ~/bin/subl;
+
+# Create symlink for Sublime Text Packages/User directory\
+#
+# See also
+#    (i)  http://www.sublimetext.com/docs/3/settings.html
+#    (ii) https://packagecontrol.io/docs/syncing
+# Remove the Packages/User directory and replace it with a symlink to dotfiles/sublime/User
+# Note: Initially I have copied all content of Packages/User into dotfiles repo, and installed
+# Package Control in sublime.
+#       1) cp -r ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User ./sublime;
+#       2) Install Package Control in Sublime Text
+if [[ -d $sublimeUserDir && ! -L $sublimeUserDir ]]; then
+    force_link "$dotfiles/sublime/User" $sublimeUserDir;
+fi

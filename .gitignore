@@ -12,3 +12,14 @@ Thumbs.db
 # Files that might appear on external disks
 .Spotlight-V100
 .Trashes
+
+# Files and Folders in Packages/User that does not need syncing via git (dotfiles)
+# https://packagecontrol.io/docs/syncing
+Package Control.last-run
+Package Control.ca-list
+Package Control.ca-bundle
+Package Control.merged-ca-bundle
+Package Control.system-ca-bundle
+Package Control.user-ca-bundle
+Package Control.cache/
+Package Control.ca-certs/
