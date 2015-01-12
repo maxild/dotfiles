@@ -123,6 +123,17 @@
 	# Detect copies as well as renames
 	renames = copies
 
+	tool = bcomp
+
+[difftool "bcomp"]
+
+	trustExitCode = true
+	cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE"
+
+[difftool]
+
+	prompt = false
+
 [help]
 
 	# Automatically correct and execute mistyped commands
@@ -132,6 +143,17 @@
 
 	# Include summaries of merged commits in newly created merge commit messages
 	log = true
+
+	tool = bcomp
+
+[mergetool "bcomp"]
+
+	trustExitCode = true
+	cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
+
+[mergetool]
+
+	prompt = false
 
 [push]
 

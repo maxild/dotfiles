@@ -1,5 +1,7 @@
 # Make vim the default editor
-export EDITOR="vim";
+#export EDITOR="vim";
+# tell sublime not to quit before saving (useful for commit messages etc)
+export EDITOR="subl -w";
 
 # Larger bash history (allow 32³ entries; default is 500)
 export HISTSIZE=32768;
@@ -20,3 +22,7 @@ export MANPAGER="less -X";
 
 # Always enable colored `grep` output
 export GREP_OPTIONS="--color=auto";
+
+# Install casks to sensible and predictable locations
+# See also https://github.com/caskroom/homebrew-cask/issues/6831
+export HOMEBREW_CASK_OPTS="--appdir=/Applications --caskroom=/etc/Caskroom"

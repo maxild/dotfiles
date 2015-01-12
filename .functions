@@ -244,3 +244,27 @@ function o() {
 function tre() {
 	tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
 }
+
+# http://stackoverflow.com/questions/3327013/how-to-determine-the-current-shell-im-working-on
+function shell() {
+	#ps | grep `echo $$` | awk '{ print $4 }';
+	#ps -p $$ | tail -1 | awk '{print $NF}'
+	ps -p $$ | tail -1 | awk '{print $4}';
+} 
+
+# set default shell to bash
+function use_bash() {
+	#chsh -s $(which bash);
+	# http://apple.stackexchange.com/questions/24632/is-it-safe-to-upgrade-bash-via-homebrew
+	chsh -s /usr/local/bin/bash;
+}
+
+# set default shell to zsh
+function use_zsh() {
+	chsh -s $(which zsh);
+}
+
+# Use it in /Applications folder to show symlinked cask installed apps
+function show-symlinked() {
+	find . -maxdepth 1 -type l -exec ls -dl {} +;
+}
