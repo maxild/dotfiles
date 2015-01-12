@@ -256,12 +256,17 @@ function shell() {
 function use_bash() {
 	#chsh -s $(which bash);
 	# http://apple.stackexchange.com/questions/24632/is-it-safe-to-upgrade-bash-via-homebrew
-	chsh -s /usr/local/bin/bash;
+	#chsh -s /usr/local/bin/bash;
+	if [[ ! $(echo $SHELL) == /usr/local/bin/bash ]]; then
+        chsh -s /usr/local/bin/bash
+    fi
 }
 
 # set default shell to zsh
 function use_zsh() {
-	chsh -s $(which zsh);
+	if [[ ! $(echo $SHELL) == $(which zsh) ]]; then
+        chsh -s $(which zsh)
+    fi
 }
 
 # Use it in /Applications folder to show symlinked cask installed apps
