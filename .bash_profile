@@ -1,3 +1,6 @@
+# Read about dotfiles projects at:
+# http://code.tutsplus.com/tutorials/setting-up-a-mac-dev-machine-from-zero-to-hero-with-dotfiles--net-35449
+
 # Add `~/bin` to the `$PATH`
 export PATH="$HOME/bin:$PATH";
 
@@ -12,6 +15,11 @@ unset file;
 # init z   https://github.com/rupa/z
 # installed by running install-deps.sh
 . ~/dev/z/z.sh
+
+# Enable shims and autocompletion in rbenv (after 'brew install rbenv ruby-build')
+if which rbenv > /dev/null; then
+  eval "$(rbenv init -)";
+fi
 
 # generic colouriser (http://kassiopeia.juls.savba.sk/~garabik/software/grc.html)
 # prerequisite: brew install grc
