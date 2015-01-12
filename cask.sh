@@ -15,6 +15,8 @@ install caskroom/cask/brew-cask
 
 # daily
 cask install alfred                 2> /dev/null
+# Note: You must activate the power pack, to setup a sync folder in alfred preferences,
+# in order to be able to run "brew cask alfred link"
 cask alfred link                    2> /dev/null
 #cask install divvy                  2> /dev/null
 cask install dropbox                2> /dev/null
@@ -28,7 +30,7 @@ cask install dropbox                2> /dev/null
 #cask install sublime-text               2> /dev/null
 #cask install imagealpha                 2> /dev/null
 #cask install imageoptim                 2> /dev/null
-#cask install totalfinder            2> /dev/null
+cask install totalfinder            2> /dev/null
 cask install sourcetree             2> /dev/null
 cask install cheatsheet             2> /dev/null
 
