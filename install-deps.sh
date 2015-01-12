@@ -40,3 +40,8 @@ cd ~/dev
 git clone https://github.com/powerline/fonts.git powerline-fonts
 cd powerline-fonts
 ./install.sh
+
+# Set symlink for Sublime Text
+# Note: ./bin/subl is an alias file that will be rsync'ed into ~/bin/subl
+ln -s '/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl' ~/bin/subl
+#ln -s /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl /usr/local/bin/subl
