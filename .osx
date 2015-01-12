@@ -2,6 +2,14 @@
 
 # ~/.osx — https://mths.be/osx
 
+#########################################################################################
+# NOTE: defaults is a command line utility that manipulates plist files.
+# The system stores each user's preferences set in a .plist file for each program stored
+# at ~/Library/Preferences for user-specific preferences, and /Library/Preferences/ for
+# global preferences. Either way, the defaults utility writes or reads from these plist
+# files depending on the one given.
+#########################################################################################
+
 # Ask for the administrator password upfront
 sudo -v
 
@@ -41,7 +49,7 @@ defaults write com.apple.systemuiserver menuExtras -array \
 	"/System/Library/CoreServices/Menu Extras/Clock.menu"
 
 # Set highlight color to green
-#defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600"
+defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600"
 
 # Set sidebar icon size to medium
 defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 2
@@ -330,8 +338,8 @@ sudo nvram boot-args="mbasd=1"
 chflags nohidden ~/Library
 
 # Remove Dropbox’s green checkmark icons in Finder
-file=/Applications/Dropbox.app/Contents/Resources/emblem-dropbox-uptodate.icns
-[ -e "${file}" ] && mv -f "${file}" "${file}.bak"
+#file=/Applications/Dropbox.app/Contents/Resources/emblem-dropbox-uptodate.icns
+#[ -e "${file}" ] && mv -f "${file}" "${file}.bak"
 
 # Expand the following File Info panes:
 # “General”, “Open with”, and “Sharing & Permissions”
