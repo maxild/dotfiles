@@ -30,6 +30,14 @@ chmod +x ~/dev/z/z.sh
 # python (need this for pip and vim)
 brew install python
 
+# It also installed Pip (and its dependency Setuptools), which is the package manager for Python.
+# Let's upgrade them both:
+pip install --upgrade setuptools
+pip install --upgrade pip
+# Note: Executable scripts from Python packages you install will be put in /usr/local/share/python.
+# TODO: Maybe this should go into .path (not in repo...by design)
+# export PATH="/usr/local/share/python:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
 # for the c alias (syntax highlighted cat)
 #sudo easy_install Pygments
 pip install pygments
