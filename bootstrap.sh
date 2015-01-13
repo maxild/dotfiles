@@ -6,7 +6,8 @@ git pull origin master;
 
 function doIt() {
 	rsync --exclude ".git/" --exclude ".DS_Store" --exclude "bootstrap.sh" \
-        --exclude "scripts" --exclude "README.md" --exclude "LICENSE-MIT.txt" \
+        --exclude "scripts" --exclude="sublime" \
+        --exclude "README.md" --exclude "LICENSE-MIT.txt" \
         -avh --no-perms . ~;
 	source ~/.bash_profile;
 }

@@ -22,7 +22,7 @@ force_link() {
 [[ -e sublimeExe ]] &&
 link sublimeExe ~/bin/subl;
 
-# Create symlink for Sublime Text Packages/User directory\
+# Create symlink for Sublime Text Packages/User directory
 #
 # See also
 #    (i)  http://www.sublimetext.com/docs/3/settings.html
