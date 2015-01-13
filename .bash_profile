@@ -1,8 +1,10 @@
 # Read about dotfiles projects at:
 # http://code.tutsplus.com/tutorials/setting-up-a-mac-dev-machine-from-zero-to-hero-with-dotfiles--net-35449
 
-# Add `~/bin` to the `$PATH`
-export PATH="$HOME/bin:$PATH";
+# Add `~/bin` (users private bin) to the `$PATH`
+if [ -d "$HOME/bin" ]; then
+  export PATH="$HOME/bin:$PATH";
+fi
 
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
