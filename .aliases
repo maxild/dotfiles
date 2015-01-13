@@ -12,13 +12,14 @@ alias cls="clear"
 alias show-path='echo $PATH | tr : "\n"'
 
 # Shortcuts
-#alias d="cd ~/Documents/Dropbox"
+alias d="cd ~/Documents/Dropbox"
 alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias p="cd ~/Projects"
-#alias g="git"
+alias g="git"
 #alias h="history"
 #alias j="jobs"
+alias rb=rbenv
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
