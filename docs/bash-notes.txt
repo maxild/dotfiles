@@ -1,0 +1,64 @@
+Bash is string in, string out (interpreter)
+iTerm2 is the terminal (key presses, fonts, colors etc)
+
+# by line
+Ctrl-A: go to the beginning of line,
+Ctrl-E: go to the end of line,
+
+# by words
+Alt-B: skip one work backward,
+Alt-F: skip one word forward,
+
+#by char
+ctrl+f
+ctrl+b
+
+# deletions
+Ctrl-U: delete to the beginning of line,
+Ctrl-K: delete to the end of line,
+Alt-D: delete to the end of word.
+
+# search
+ctrl+r: i-search in history...clever and powerful
+
+See also http://askubuntu.com/questions/45521/how-to-navigate-long-commands-faster
+
+# Shebangs
+##########
+#!/bin/bash
+#!/usr/bin/env bash
+
+Quote variables
+single quotes escapes
+double quotes does not escape (use it around all variable)
+"$var"
+"${var}somemoretext"
+$1, $2,..., $*
+$#: Number of arguments
+$?:  Exit status of last command
+${#var}: length of variable
+$HOME,... predefined vars
+
+Use man or help commands
+
+The documentation uses the pager less.
+
+# Navigation
+############
+/search
+space
+arrow keys
+
+# Examples
+man grep
+man ls
+
+help bash
+
+# Conditionals
+##############
+help if
+help test : [ ... ] works outside bash...portable
+help [[ : Bash specific extension [[ ... ]] works only in bash...better
+help test
+
