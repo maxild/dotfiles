@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+# create new bash script in ~/bin.
+
+if [[ ! $1 ]]; then
+    echo "Missing filename argument";
+    exit 1;
+fi
+
+scriptname="$1"
+bindir="${HOME}/bin"
+filename="${bindir}/${scriptname}"
+
+if [[ -e filename ]]; then
+    echo "Error: File ${filename} already exists"
+    exit 1
+fi
+
+if type $scriptname &> /dev/null; then
+    echo "Error: There is already a command named ${scriptname}"
+    exit 1
+fi
+
+if [[ ! -d $bindir ]]; then
+    if mkdir $bindir; then
+        echo "Created ${bindir}"
+    else
+        echo "Error: Could not create ${bindir}";
+        exit 1
+    fi
+fi
+
+# create script with a single shebang line
+echo "#!/usr/bin/env bash" > $filename
+# add executable permission
+chmod u+x $filename
+# open in editor
+if [[ $EDITOR ]]; then
+  $EDITOR "$filename"
+else
+  echo "Script ${filename} created, not starting editor because \$EDITOR is not set."
+fi
+
+exit 0
+
