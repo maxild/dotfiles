@@ -11,21 +11,26 @@ declare -i start=0
 declare -i step=1
 declare reverse
 
-while getopts "b:s:r" opt; do
+# we use silent error reporting by starting options-string with a colon
+while getopts ":b:s:r" opt; do
   case "$opt" in
     b)
-      [[ "$OPTARG" =~ ^[0-9]+$ ]] || { echo "${OPTARG} is not a number." >&2; exit 1; }
+      [[ "$OPTARG" =~ ^[0-9]+$ ]] || { echo "The value ${OPTARG} for the -b option is not a number." >&2; exit 1; }
       start="$OPTARG"
       ;;
     s)
-      [[ "$OPTARG" =~ ^[0-9]+$ ]] || { echo "${OPTARG} is not a number." >&2; exit 1; }
+      [[ "$OPTARG" =~ ^[0-9]+$ ]] || { echo "The value ${OPTARG} for the -s option is not a number." >&2; exit 1; }
       step="$OPTARG"
       ;;
     r)
       reverse="true"
       ;;
+    \:)
+      echo "Option -${OPTARG} is missing an argument." >&2
+      exit 1
+      ;;
     \?)
-      # Unknown option...getopts has already printed error to terminal
+      echo "Unknown -${OPTARG} option." >&2
       exit 1
       ;;
   esac
@@ -36,10 +41,10 @@ done
 shift $(( OPTIND - 1 ))
 
 if [[ "$1" ]]; then
-  [[ "$1" =~ ^[0-9]+$ ]] || { echo "$1 is not a number."; exit 1; }
+  [[ "$1" =~ ^[0-9]+$ ]] || { echo "The endIndex $1 is not a number."; exit 1; }
   end="$1"
 else
-  echo "Missing endIndex argument" >&2
+  echo "Missing endIndex argument." >&2
   exit 1
 fi
 
