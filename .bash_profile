@@ -14,9 +14,11 @@ for file in ~/.{path,bash_prompt,exports,aliases,functions,extra,symlinks}; do
 done;
 unset file;
 
-# init z   https://github.com/rupa/z
-# installed by running install-deps.sh
-. ~/dev/z/z.sh
+# Initialize z. See https://github.com/rupa/z
+# Installed by running install-deps.sh
+if [[ -e "$HOME/dev/z/z.sh" ]]; then
+  source ~/dev/z/z.sh
+fi
 
 # Enable shims and autocompletion in rbenv (after 'brew install rbenv ruby-build')
 if which rbenv > /dev/null; then
@@ -25,9 +27,8 @@ fi
 
 # generic colouriser (http://kassiopeia.juls.savba.sk/~garabik/software/grc.html)
 # prerequisite: brew install grc
-GRC=`which grc`
-if [ "$TERM" != dumb ] && [ -n "$GRC" ]
-then
+GRC=$(which grc)
+if [ "$TERM" != dumb ] && [ -n "$GRC" ]; then
     alias colourify="$GRC -es --colour=auto"
     alias configure='colourify ./configure'
     alias diff='colourify diff'
@@ -66,7 +67,7 @@ elif [ -f /etc/bash_completion ]; then
 fi;
 
 # Enable tab completion for `g` by marking it as an alias for `git`
-if type _git &> /dev/null && [ -f /usr/local/etc/bash_completion.d/git-completion.bash ]; then
+if type _git > /dev/null 2>&1 && [ -f /usr/local/etc/bash_completion.d/git-completion.bash ]; then
 	complete -o default -o nospace -F _git g;
 fi;
 
