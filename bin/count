@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+# Dummy script to learn about getopts
+
+# Usage: count [-b startIndex] [-s stepSize] [-r] endIndex
+#
+# prints startIndex,...,endIndex to terminal
+
+declare -i end=0
+declare -i start=0
+declare -i step=1
+declare reverse
+
+while getopts "b:s:r" opt; do
+  case "$opt" in
+    b)
+      [[ "$OPTARG" =~ ^[0-9]+$ ]] || { echo "${OPTARG} is not a number." >&2; exit 1; }
+      start="$OPTARG"
+      ;;
+    s)
+      [[ "$OPTARG" =~ ^[0-9]+$ ]] || { echo "${OPTARG} is not a number." >&2; exit 1; }
+      step="$OPTARG"
+      ;;
+    r)
+      reverse="true"
+      ;;
+    \?)
+      # Unknown option...getopts has already printed error to terminal
+      exit 1
+      ;;
+  esac
+done
+
+# OPTIND will contain the number of options passed on the command line
+# Shift will leave only the remaining (mandatory) positional argument
+shift $(( OPTIND - 1 ))
+
+if [[ "$1" ]]; then
+  [[ "$1" =~ ^[0-9]+$ ]] || { echo "$1 is not a number."; exit 1; }
+  end="$1"
+else
+  echo "Missing endIndex argument" >&2
+  exit 1
+fi
+
+if [[ "$reverse" ]]; then
+  for (( index = end; index >= start; index -= 1 )); do
+    echo $index
+  done
+else
+  for (( index = start; index <= end; index += 1 )); do
+    echo $index
+  done
+fi
