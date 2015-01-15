@@ -2,44 +2,117 @@
 
 # create new bash script in ~/bin.
 
-if [[ ! $1 ]]; then
-    echo "Missing filename argument";
-    exit 1;
-fi
+# Test cases
+#   - Missing argument
+#   - Many arguments
+#   - Invalid scriptname (existing script, existing command)
+#   - No EDITOR env var
+#
+#   - --help works
+#
+# Function and return codes:
+# ==========================
+#
+# return (and exit) give back a status code from 0 to 255, available in $? to
+# the caller (in some other script for exit, in the same script for return).
+# You cannot stuff anything else into a status code (e.g. return "sometext").
+# You can use (global) variables, or echo results in the function combined with
+# command substitution in the calling script, to share results.
+# The purpose of return and exit are to pass status codes, not values or
+# computation results as one might expect in other programming languages like C.
 
-scriptname="$1"
-bindir="${HOME}/bin"
-filename="${bindir}/${scriptname}"
+main () {
 
-if [[ -e filename ]]; then
-    echo "Error: File ${filename} already exists"
-    exit 1
-fi
+  [[ ! $1 ]] && { echo "Error: Missing filename argument." >&2; exit 1; }
 
-if type $scriptname &> /dev/null; then
-    echo "Error: There is already a command named ${scriptname}"
-    exit 1
-fi
+  # dispatch to command function
+  local cmd=
+  case "$1" in
+    "--help" )
+      cmd="usage"
+      ;;
+    * )
+      cmd="create_scripts"
+      ;;
+  esac
 
-if [[ ! -d $bindir ]]; then
-    if mkdir $bindir; then
-        echo "Created ${bindir}"
-    else
-        echo "Error: Could not create ${bindir}";
-        exit 1
+  # call the command function
+  $cmd "$@"
+  local ret=$?
+  if [ $ret -eq 0 ]; then
+    exit 0
+  else
+    echo "failed with code=$ret" >&2
+    exit $ret
+  fi
+}
+
+create_scripts () {
+  local bindir="${HOME}/bin"
+
+  # create users bin directory is necessary
+  ensure_dir "$bindir"
+
+  # global variable used to get the first filename created
+  filename=
+
+  local ret=0
+  while [[ "$1" ]]; do
+    if ! create_script "$1"; then
+      # if any script is not created tell the caller
+      ret=1
     fi
-fi
+    shift
+  done
 
-# create script with a single shebang line
-echo "#!/usr/bin/env bash" > $filename
-# add executable permission
-chmod u+x $filename
-# open in editor
-if [[ $EDITOR ]]; then
-  $EDITOR "$filename"
-else
-  echo "Script ${filename} created, not starting editor because \$EDITOR is not set."
-fi
+  # open in editor
+  if [[ $# -eq 1 && "$EDITOR" && $ret -eq 0 ]]; then
+    $EDITOR "$filename"
+  fi
 
-exit 0
+  return $ret
+}
 
+create_script () {
+  local scriptname="$1"
+  filename="${bindir}/${scriptname}"
+
+  [[ -e "$filename" ]] && { echo "Error: File ${filename} already exists." >&2; return 1; }
+
+  if type $scriptname > /dev/null 2>&1; then
+    cat >&2 <<EOF
+Error: There is already a command named ${scriptname}.
+EOF
+    return 1
+  fi
+
+  # create a script with a single shebang line
+  echo "#!/usr/bin/env bash" > $filename
+
+  # add executable permission
+  chmod u+x $filename
+
+  echo "Created script ${filename}"
+
+  return 0
+}
+
+ensure_dir () {
+  if ! [ -d "$1" ]; then
+    mkdir -p -- "$1" || fail "couldn't create $1"
+  fi
+}
+
+usage () {
+  cat <<EOF
+
+Create one or more bash script in users private bin directory (i.e. ~/bin).
+If only one script is created it will be opened in users default editor (if
+\$EDITOR env variable is defined).
+
+Usage: create_script <filename> [<filename> ...]
+
+EOF
+}
+
+main "$@"
