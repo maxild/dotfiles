@@ -9,8 +9,19 @@
 	],
 	"installed_packages":
 	[
+		"BracketHighlighter",
 		"Dotfiles Syntax Highlighting",
+		"Emmet",
+		"HTML5",
+		"JsFormat",
+		"Markdown Preview",
+		"MarkdownEditing",
 		"Package Control",
+		"PackageResourceViewer",
+		"SideBarEnhancements",
+		"SublimeLinter",
+		"SublimeLinter-jshint",
+		"Syntax Highlighting for Sass",
 		"TrailingSpaces"
 	]
 }
