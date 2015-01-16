@@ -1,0 +1,8 @@
+[
+  { "keys": ["alt+m"], "command": "markdown_preview", "args": {"target": "browser", "parser":"markdown"} },
+  { "keys": ["ctrl+b"], "command": "build" },
+
+  // make command_palette have same shortcut on mac as on win (overwrites default show_scope_name
+  // but this command still has shortcut 'super+alt+p').
+  { "keys": ["ctrl+shift+p"], "command": "show_overlay", "args": {"overlay": "command_palette"} },
+]
