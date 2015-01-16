@@ -39,6 +39,30 @@ $?:  Exit status of last command
 ${#var}: length of variable
 $HOME,... predefined vars
 
+Techniques
+##########
+
+Command substitution: $(which bash)
+
+Parameter expansion:
+${#var},
+remove patterns from string
+${path#*/}
+${path##*/}
+${path%.*},
+{path%/*}
+replace patterns from string: ${var/relace-pattern/replace-with}
+default value: ${var:-value}
+I/O redirection: { cat >&2 "Some error text"; echo "more errors" >&2; }
+Here documents: <<MSG ..... MSG (newline important)
+
+# Debugging scripts
+set -x
+set -u
+set -n
+set -v
+
+
 Use man or help commands
 
 The documentation uses the pager less.
