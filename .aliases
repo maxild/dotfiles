@@ -21,6 +21,13 @@ alias g="git"
 #alias j="jobs"
 alias rb=rbenv
 
+# ST3 data directory aliases
+if [[ -e "$HOME/Library/Application Support/Sublime Text 3" ]]; then
+  alias subld="cd ~/Library/Application\ Support/Sublime\ Text\ 3"
+  alias sublp="cd ~/Library/Application\ Support/Sublime\ Text\ 3/Packages"
+  alias sublu="cd ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User"
+fi
+
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
 	colorflag="--color"
