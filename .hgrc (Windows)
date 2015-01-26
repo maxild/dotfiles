@@ -1,0 +1,12 @@
+; See http://www.scootersoftware.com/support.php?zz=kb_vcs#mercurial
+
+[extdiff]
+cmd.bcomp = C:\Program Files (x86)\Beyond Compare 4\BComp.exe
+opts.bcomp = /ro
+
+[merge-tools]
+bcomp.executable = C:\Program Files (x86)\Beyond Compare 4\BComp.exe
+bcomp.args = $local $other $base $output
+bcomp.priority = 1
+bcomp.premerge = True
+bcomp.gui = True

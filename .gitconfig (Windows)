@@ -1,0 +1,17 @@
+[core]
+
+  # Tell Git to convert LF to CRLF on checkout, and to convert back CRLF to LF,
+  # when adding files to the index (i.e. staging area) before commits
+  autocrlf = true
+
+[credential]
+
+  helper = !'C:\\Users\\mom\\AppData\\Roaming\\GitCredStore\\git-credential-winstore.exe'
+
+[difftool "bcomp"]
+  trustExitCode = true
+  cmd = \"c:/program files (x86)/beyond compare 4/bcomp.exe\" \"$LOCAL\" \"$REMOTE\"
+
+[mergetool "bcomp"]
+  trustExitCode = true
+  cmd = \"c:/program files (x86)/beyond compare 4/bcomp.exe\" \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"

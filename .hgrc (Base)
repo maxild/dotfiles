@@ -1,0 +1,29 @@
+; User specific Mercurial config file.
+; See the hgrc man page for details.
+
+[ui]
+username = maxild <mmaxild@gmail.com>
+editor = subl --wait
+logtemplate='{latesttag}-{latesttagdistance}-{node|short}: [{phase}] {desc}\n'
+merge = bcomp
+
+[extensions]
+rebase =
+bookmarks =
+hgext.convert =
+mercurial_keyring =
+extdiff =
+hgext.purge=
+mq =
+eol=
+
+[tortoisehg]
+ui.language = en
+authorcolor = True
+vdiff = bcomp
+
+; This will cause Mercurial to only track and update the currently active bookmark.
+; This is similar to Git's approach to branching. (By default in Mercurial, when
+; several bookmarks point to the same changeset, they will all move forward together).
+[bookmarks]
+track.current = True

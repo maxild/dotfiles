@@ -1,8 +1,4 @@
-[ui]
-merge = bcomp
-
-[extensions]
-extdiff =
+; See http://www.scootersoftware.com/support.php?zz=kb_vcs_osx
 
 [extdiff]
 cmd.bcomp = /usr/local/bin/bcomp

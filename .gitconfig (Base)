@@ -74,11 +74,6 @@
 	# Detect whitespace errors when applying a patch
 	whitespace = fix
 
-[credential]
-
-	#  See https://help.github.com/articles/caching-your-github-password-in-git/
-	helper = osxkeychain
-
 [core]
 
 	# Use custom `.gitignore` and `.gitattributes`
@@ -130,11 +125,6 @@
 
 	tool = bcomp
 
-[difftool "bcomp"]
-
-	trustExitCode = true
-	cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE"
-
 [difftool]
 
 	prompt = false
@@ -150,11 +140,6 @@
 	log = true
 
 	tool = bcomp
-
-[mergetool "bcomp"]
-
-	trustExitCode = true
-	cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
 
 [mergetool]
 
@@ -188,3 +173,7 @@
 [url "git://gist.github.com/"]
 
 	insteadOf = "gist:"
+
+[user]
+  name = maxild
+  email = mmaxild@gmail.com

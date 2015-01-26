@@ -11,7 +11,7 @@ function doIt() {
   # '/scripts/' excludes ./scripts directory (i.e. only ../dotfiles/scripts/ folder).
   # etc....
 	rsync --exclude ".git/" --exclude ".DS_Store" --exclude "/bootstrap.sh" \
-        --exclude "/scripts/" --exclude "/docs/" \
+        --exclude "bootstrap.ps1" -exclude "/scripts/" --exclude "/docs/" \
         --exclude "/README.md" --exclude "/LICENSE-MIT.txt" \
         -avh --no-perms . ~;
 	source ~/.bash_profile;

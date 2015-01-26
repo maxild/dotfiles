@@ -1,0 +1,17 @@
+[core]
+
+  # Tell Git to convert CRLF to LF on commit but not the other way around
+  autocrlf = input
+
+[credential]
+
+  #  See https://help.github.com/articles/caching-your-github-password-in-git/
+  helper = osxkeychain
+
+[difftool "bcomp"]
+  trustExitCode = true
+  cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE"
+
+[mergetool "bcomp"]
+  trustExitCode = true
+  cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
