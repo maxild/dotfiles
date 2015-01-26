@@ -1,0 +1,90 @@
+Packages:
+
+Packages are stored in .sublime-package files, which are zip files with a different extension. Packages may also be stored unzipped within a directory, or a mix of the two: any loose files in the package directory will override files stored in the .sublime-package file.
+
+Locations:
+
+Zipped packages may be stored in:
+
+<executable_path>/Packages
+<data_path>/Installed Packages
+
+Loose packages may be stored in:
+
+<data_path>/Packages (use PackageResourceViewer plugin to unzip from 'Installed Packages' into 'Packages' folder)
+
+On my Mac data_path is '~/Library/Application Support/Sublime Text 3/', and executable_path is ''.
+
+Snippets can also be saved in 'Packages/User' folder. But how do we keep Javascript in Javascript folder as in Packages folder???
+
+There are two special packages: Default and User. Default is always ordered first, and User is always ordered last. Packages other than Default and User are ordered alphabetically.
+
+To override a file in an existing package, just create a file with the same name under the Packages/<Package Name> directory. Use the PackageResourceViewer plugin to extract from 'Installed Packages' into 'Packages' folder.
+
+For example to override the file if.sublime-snippet in the Javascript.sublime-package package that ships with Sublime Text, create a directory called Javascript under the <data_path>/Packages directory, and place your if.sublime-snippet file there.
+
+File types:
+
+*.sublime-snippet
+*.tmLanguage
+*.sublime-keymap
+*.sublime-menu
+
+Packages/Default folder:
+
+Settings - Default:
+
+Packages/User folder:
+
+Key Bindings (Hotkeys):
+
+Key Bindings - User:
+
+Up til 3 different files per platform
+
+1. Default (OSX).sublime-keymap
+2. todo-win.sublime-keymap
+3. Default (Linux).sublime-keymap
+
+You can debug the keymap files by writing 'sublime.log_commands(True)' in the console.
+
+#Settings Files
+
+Settings files are consulted in this order:
+
+1. Packages/Default/Preferences.sublime-settings
+2. Packages/Default/Preferences (<platform>).sublime-settings
+3. Packages/User/Preferences.sublime-settings
+4. <Project Settings>
+5. Packages/<syntax>/<syntax>.sublime-settings
+6. Packages/User/<syntax>.sublime-settings
+7. <Buffer Specific Settings>
+
+In general, you should place your settings in Packages/User/Preferences.sublime-settings. If you want to specify settings for a certain file type, for example, Python, you should place them in Packages/User/Python.sublime-settings.
+
+##Troubleshooting settings
+
+As settings can be specified in several different places, sometimes in can be helpful to view the applied setting that's actually being used by the current file. You can do this by using the console:
+
+view.settings().get('font_face')
+
+##Scopes
+
+Snippets are bound to a scope via a scope selector. Here is a list of scopes in Sublime Text. https://gist.github.com/iambibhas/4705378
+
+You can view the current scope of the cursor by pressing 'super+alt+p' ('alt+cmd+p' on Mac OS X)
+
+##Snippets
+
+Unfortunately, the way ST3 is set up, it's quite difficult to completely remove files contained in the default packages, and even if you did, upon upgrade the files would be there again. So, in your case, what we'll have to do is override the default files by creating new files with the same name, but no active content.
+
+First, go to Preferences -> Browse Packages... to open up a file explorer window from your operating system (Finder, Windows Explorer, Nautilus, etc.). Create a new folder called "JavaScript", then inside that folder, create two new empty files called "for-()-{}.sublime-snippet" and "for-()-{}-(faster).sublime-snippet". Open each of these files in Sublime, and paste the following contents into them:
+
+<snippet>
+    <content><![CDATA[$1]]></content>
+</snippet>
+
+This essentially creates a valid but empty snippet with no tabTrigger. Save these files, restart Sublime for good luck, and now when you're working in JavaScript and type "for", only your "Packages/User/for.sublime-snippet" (or whatever you named it) should be active.
+
+To extract the snippet file, you can use https://github.com/skuroda/PackageResourceViewer. If you use the plugin to navigate to the file you want, you can make your edits there. Upon saving, it will create the proper structure to override an existing package file. Of course, you can always extract and what not manually, but the plugin will likely save you some trouble in finding everything since plugins can be in the 'packages' folder, the 'installed packages' folder, or in the 'executable' folder.
+

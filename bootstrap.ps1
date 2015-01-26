@@ -13,7 +13,7 @@ $otherFiles = ".editorconfig .gitattributes .npmrc"
 
 cd "$rootFolder"
 
-#git pull origin master
+git pull origin master
 
 function build($files) {
   Foreach ($file in $files)
