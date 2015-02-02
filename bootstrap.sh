@@ -37,8 +37,7 @@ function sync() {
   fi
 
   # Note --dry-run (or -n) option will make rsync only list files to be synced
-  eval "rsync $excludeOptions-navh --no-perms $sourceDir $destinationDir"
-  #echo "rsync $excludeOptions-navh --no-perms $sourceDir $destinationDir"
+  eval "rsync $excludeOptions-avh --no-perms $sourceDir $destinationDir"
 }
 
 function doIt() {
