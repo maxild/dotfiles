@@ -14,6 +14,11 @@ for file in ~/.{path,bash_prompt,exports,aliases,functions,extra}; do
 done;
 unset file;
 
+# Initialize 'K Runtime Version Manager' (kvm tool in ASP.NET 5)
+if which kvm.sh > /dev/null; then
+  source kvm.sh
+fi
+
 # Initialize z. See https://github.com/rupa/z
 # Installed by running install-deps.sh
 if [[ -e "$HOME/dev/z/z.sh" ]]; then
