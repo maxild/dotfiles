@@ -28,18 +28,41 @@ fail () {
   exit 1
 }
 
-# By default, nave puts its stuff in ~/.nave/. If this directory does not exist
-# and cannot be created, then it will attempt to use the location of the nave.sh
-# bash script itself. If it cannot write to this location, then it will exit with an error.
+link() {
+  from="$1"
+  to="$2"
+  echo "Symlink '$from' to '$to'"
+  rm -rf "$to"
+  ln -s "$from" "$to"
+}
+
+function get_abspath() {
+  [[ ! -f "$1" ]] && return 1
+  [[ -n "$no_symlinks" ]] && local pwdp='pwd -P' || local pwdp='pwd'
+  echo "$( cd "$( echo "${1%/*}" )" 2>/dev/null; $pwdp )"/"${1##*/}" # echo result.
+  return 0
+}
+
+# By default, nave puts its stuff in ~/.nave/.
+# If this directory does not exist and cannot be created,
+# then it will attempt to use the location of the nave.sh
+# bash script itself. If it cannot write to this location,
+# then it will exit with an error.
 # Therefore make a folder where nave can put its stuff.
-if [[ ! -d ~/.nave ]]; then
-    mkdir ~/.nave || fail 'Error: could not create ~/.nave'
+if [[ ! -d "$HOME/.nave" ]]; then
+    mkdir "$HOME/.nave" || fail 'Error: could not create ~/.nave'
 fi
+
 # wget down the bash script and make it executable,
 cd ~/.nave
-wget http://github.com/isaacs/nave/raw/master/nave.sh &> /dev/null
+#wget http://github.com/isaacs/nave/raw/master/nave.sh &> /dev/null
+wget http://github.com/isaacs/nave/raw/master/nave.sh
 chmod a+x nave.sh
+
+scriptPath=$(get_abspath "${BASH_SOURCE}")
+scriptsFolder=$(dirname "${scriptPath}")
+
 # and symlink the bash script into /usr/local/bin/nave
-if [[ ! -e /usr/local/bin/nave ]]; then
-  ln -s $PWD/nave.sh /usr/local/bin/nave
+if [[ ! -e "/usr/local/bin/nave" ]]; then
+  link "$scriptsFolder/nave.sh" "/usr/local/bin/nave"
 fi
