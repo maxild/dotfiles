@@ -1,0 +1,53 @@
+### K Version Manager
+
+The new K Runtime Environment is a new cross-platform .NET runtime running on Windows, Mac OS X and Linux. The runtime is installed in ~/.kre on either platform. A KRE is simple a subfolder/package in ~/.kre/packages. To handle KRE packages we use the kvm tool.
+
+Runtimes I know of:
+
+1. CLR (Windows)
+2. CoreCLR (Windows)
+3. Mono (Mac OS X, Linux)
+
+Architectures I know of:
+
+1. amd64 (64bit)
+2. x86 (32bit)
+
+Note: Is there anyway to see available packages from feed?
+
+###Install a KRE by specifying version, CPU and flavour of the CLR:
+
+kvm install 1.0.0-beta2 -amd64 -r CoreCLR
+kvm install <semver|alias>
+
+The -g flag will persist changes accross users on the machine. The -f flag will force the excution of the download
+
+###Install the latest KRE
+
+kvm upgrade -amd64 -r CoreCLR
+
+###Set default runtime by adding KRE to path of current shell and set version as the default version
+
+kvm use 1.0.0-beta2 -amd64 -r CoreCLR
+kvm use <alias>
+
+###We can use an alias instead of specifying version, CPU and flavour of the CLR.
+
+###List aliases:
+
+kvm alias
+
+###See specific alias:
+
+kvm alias default
+
+###Create alias:
+
+kvm alias CoreCLR64 1.0.0-beta2 -amd64 -r CoreCLR
+
+###Remove alias:
+
+kvm unalias CoreCLR64
+
+
+

@@ -1,0 +1,32 @@
+### The K Package Manager
+
+Use kpm help.
+
+Use kpm help <command>
+
+###Restore packages (read from project.json)
+
+kpm restore
+kpm restore <directory|project.json|global.json>
+
+You can specify the source via the --source flag.
+
+Configuring the feed for Nuget is done via a NuGet.config file which is available in the user profile folder. On Windows machine it can be found at %AppData%\NuGet\NuGet.config and on *nix machines which run ASP.NET via Mono it can be found at ~/.config/NuGet/NuGet.config.
+
+###Install a package (dependency into project.json)
+
+kpm install
+
+###Add a dependency to project.json
+
+kpm add
+
+###Build NuGet package(s) for the project in given directory.
+
+kpm build
+
+###Bundle application for deployment
+
+kpm pack
+
+You can use the --out flag to specify the destination directory.

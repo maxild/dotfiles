@@ -1,0 +1,89 @@
+### The KRuntime (ASP.NET 5) Architecture
+
+There are 5 layers in KRE archtecture:
+
+1. Application layer: This is middleware and your app code (StartUp.Configure(builder), Middleware, Controllers etc.)
+2. Hosting layer (Microsoft.AspNet.Hosting): The core hosting infrastructure and startup logic for ASP.NET 5 applications. It will walk the dependencies given in project.json, and build up the closure of dependencies the app will use (complex).
+3. Managed Entry Point (Mono, CLR or CoreCLR): Create LoaderContainer responsible for loading assemblies (The hosting layer will provide ILoader instances that can load assemblies from NuGet packages, Cached Assemblies etc.).
+3. CLR Native Host (Mono, CLR or CoreCLR): Boot the CLR you are using, and create the AppDomain that all managed code will run in.
+4. Native OS Process: Thin layer bootstrapping the version of the CLR you use (could be klr.exe used when self-hosting during development).
+
+Another high-level view is:
+
+1. Application
+2. MVC6, Nancy, SignalR etc. (i.e. other Middleware)
+3. KRE
+4. CoreCLR, (full) CLR or Mono
+
+Notes:
+
+1. project.json superseedes packages.json and *.csproj. No more MSBuild!!!!
+2. NuGet packages are the unit of reference (dependencies)
+3. Projects and NuGet packages are interchangeable. Projects can depend on packages. Packages can depend on projects.
+4. Rosly compiler makes runtime compilation possible. No more build stedp before hiiting f5/ctrl+R/cmd+R in chrome.
+5. Same design time and run time compiler. No more <compilation> section in web.config.
+6. Package manager (kpm tool) can produce NuGet packages.
+7. New dependency resolution (what assemblies to load) system build into the KRuntime.
+8. New dependency injection (IoC container) system everywhere in application code.
+9. No strong naming.
+10. Lightwright pay as you go stack (OWIN middleware archtecture, No System.Web anymore!!!!!!).
+11. Side by side runtimes (CLR versions)
+12. Cross platform (Windows, Mac OS X, Linux)
+13. Open Source!!!
+14.
+
+###Github repositories in the new web stack:
+
+.NET 5:
+
+1. Home (https://github.com/dotnet/home): This is the hub for all the projects that are part of the .NET Foundation.
+http://www.dotnetfoundation.org
+2. .NET Core 5 (https://github.com/dotnet/corefx): This repo contains the foundational libraries that make up the .NET Core development stack.
+Roslyn (https://github.com/dotnet/roslyn): The .NET Compiler Platform ("Roslyn") provides open-source C# and Visual Basic compilers with rich code analysis APIs.
+2. Mono Roslyn (https://github.com/mono/roslyn):  Roslyn Compiler - Tracks Mono Patches.
+
+ASP.NET 5:
+
+Note: KRuntime: Renamed to .NET XRE (.NET Cross-Platform SDK)
+
+1. Home (https://github.com/aspnet/Home). The kvm scripts that will enable user to bootstrap KRuntime.
+2. KRuntime (XRE) (https://github.com/aspnet/XRE): The .NET Cross-Platform Runtime SDK (.NET XRE) contains the code required to bootstrap and run an application. This includes things like the compilation system, SDK tools, and the native CLR hosts (kpm, k, klr,... i.e. the KRE).
+  * Core runtime
+  * Project system
+  * Loader (new compilation system)
+4. Hosting: The code that knows how to boot web applications on the new web stack. Finding Startup class, calling into Configure(IApplicationBuilder app). it also contains the interfaces to write up an http server.
+
+Cross cutting concerns (most other projects depend on these):
+
+1. Logging (https://github.com/aspnet/Logging): Common logging abstractions for ASP.NET vNext.
+2. Caching (https://github.com/aspnet/Caching): Libraries for caching, including in-memory caching, distributed caching, and ASP.NET session caching.
+3. Identity (https://github.com/aspnet/Identity): Membership system for building ASP.NET web applications, including membership, login, and user data.
+4. Configuration (https://github.com/aspnet/Configuration): Interfaces and providers for accessing simple config files.
+5. FileSystem (https://github.com/aspnet/FileSystem): Abstraction of file system APIs.
+6. DependencyInjection (https://github.com/aspnet/DependencyInjection): Contains the common DI abstractions that ASP.NET and EF vNext use, as well as adapters for some IoC containers.
+
+HTTP and OWIN (Hosting, Mvc, Routing depends on these abstractions)
+
+1. HttpAbstractions: HttpContext, HttpRequest, HttpResponse, and the new IApplicationBuilder (IBuilder) to wire up middleware. It also contains OWIN supporty.
+
+Middleware:
+
+1. Routing (https://github.com/aspnet/Routing): Middleware for routing requests to application logic.
+2. StaticFiles (https://github.com/aspnet/StaticFiles): Middleware for handling requests for file system resources including files and directories.
+3. Diagnostics (https://github.com/aspnet/Diagnostics): Middleware to show diagnostic information about a site, including error pages.
+
+Frameworks (Middleware)
+
+2. MVC (https://github.com/aspnet/Mvc): Model view controller framework for building dynamic web sites with clean separation of concerns, including the merged MVC, Web API, and Web Pages w/ Razor.
+  * No more statics.
+  * More extensibility points.
+  * Can be self-hosted (owin freindly).
+  * Controllers are POCOs.
+  * RazorViewEngine is Roslyn based.
+  * *Everything* is async (just like Koa framework), so async/await pattern everywhere (just like function*() { var x = yield writeAsync(...) }).
+3. SignalR-Server:
+2. Razor: The new Razor has a new code generation model that is *not* dependent on code dom.
+
+
+
+13.
