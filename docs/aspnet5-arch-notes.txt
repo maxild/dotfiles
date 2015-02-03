@@ -40,7 +40,7 @@ Notes:
 http://www.dotnetfoundation.org
 2. .NET Core 5 (https://github.com/dotnet/corefx): This repo contains the foundational libraries that make up the .NET Core development stack.
 Roslyn (https://github.com/dotnet/roslyn): The .NET Compiler Platform ("Roslyn") provides open-source C# and Visual Basic compilers with rich code analysis APIs.
-2. Mono Roslyn (https://github.com/mono/roslyn):  Roslyn Compiler - Tracks Mono Patches.
+3. Mono Roslyn (https://github.com/mono/roslyn):  Roslyn Compiler - Tracks Mono Patches.
 
 ASP.NET 5:
 
@@ -51,7 +51,7 @@ Note: KRuntime: Renamed to .NET XRE (.NET Cross-Platform SDK)
   * Core runtime
   * Project system
   * Loader (new compilation system)
-4. Hosting: The code that knows how to boot web applications on the new web stack. Finding Startup class, calling into Configure(IApplicationBuilder app). it also contains the interfaces to write up an http server.
+3. Hosting (https://github.com/aspnet/Hosting): The code that knows how to boot web applications on the new web stack. Finding Startup class, calling into Configure(IApplicationBuilder app). it also contains the interfaces to write up an http server.
 
 Cross cutting concerns (most other projects depend on these):
 
@@ -74,16 +74,13 @@ Middleware:
 
 Frameworks (Middleware)
 
-2. MVC (https://github.com/aspnet/Mvc): Model view controller framework for building dynamic web sites with clean separation of concerns, including the merged MVC, Web API, and Web Pages w/ Razor.
+1. MVC (https://github.com/aspnet/Mvc): Model view controller framework for building dynamic web sites with clean separation of concerns, including the merged MVC, Web API, and Web Pages w/ Razor.
   * No more statics.
   * More extensibility points.
   * Can be self-hosted (owin freindly).
   * Controllers are POCOs.
   * RazorViewEngine is Roslyn based.
   * *Everything* is async (just like Koa framework), so async/await pattern everywhere (just like function*() { var x = yield writeAsync(...) }).
-3. SignalR-Server:
-2. Razor: The new Razor has a new code generation model that is *not* dependent on code dom.
+2. SignalR-Server:
+3. Razor: The new Razor has a new code generation model that is *not* dependent on code dom.
 
-
-
-13.
