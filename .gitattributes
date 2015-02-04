@@ -1,3 +1,5 @@
-# Automatically normalize line endings for all text-based files
-#* text=auto
+# Set the default behavior, in case people don't have core.autocrlf set.
+# Automatically end-of-line normalize text files (i.e. if Git decides
+# that file is a text file, its line endings will be converted to LF on checkin)
+* text=auto
 # Disabled because of https://github.com/mathiasbynens/dotfiles/issues/149 :(

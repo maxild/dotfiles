@@ -1,7 +1,9 @@
 [core]
 
   # Tell Git to convert LF to CRLF on checkout, and to convert back CRLF to LF,
-  # when adding files to the index (i.e. staging area) before commits
+  # when adding files to the index (i.e. staging area) before commits.
+  # Note: We are using (global) .gitattributes files to specify end-of-line
+  # conversions, and therefore this setting will never be relevant!!!
   autocrlf = true
 
 [credential]
