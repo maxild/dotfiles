@@ -1,0 +1,39 @@
+###Nuget.exe
+
+The command line tool, NuGet.exe, will download and unpack packages, but it won't automate Visual Studio and modify your project files. NuGet.exe is also used to create and publish packages.
+
+###project.json
+
+
+frameworkAssemblies: The frameworkAssemblies section is specific to a target framework. This is a dependency that will not fallback to be downloaded via a NuGet feed. This corresponds to adding a reference/GAC assembly. Typically used with net40 and net45 target frameworks. These won't be restored using kpm restore and they'll be put in the frameworkAssemblies section when generating the nupkg.
+
+dependencies: The are just like project references under the KRuntime. Or Nuget references. When this project uses this ‘project reference’ it pulls the source code for the referenced project and compiles it on the fly (using Roslyn) and executes it.
+
+###Finding packages
+
+Reverse package search for ASP.NET vNext packages. Search for a type/member and it will search for a package. http://packagesearch.azurewebsites.net/
+this tool lets you search for packages and namespaces in the vNext BCL/FCL libraries by name:
+
+
+###Writing cross-target-framework code
+
+The compiler constants available for the three target versions in this project are:
+* ASPNET50
+* ASPNETCORE50
+* NET45.
+Each of these #define constants are implicitly created as upper case versions of the defined frameworks in project.json. You can use either of these to take particular action or bracket code for compilation.
+
+
+###Using my (class) library in another project (project references)
+
+I can simply add a NuGet reference to it under the the dependencies node.
+
+###Building my (class) library
+
+In aspnet5 (vNext) the compiler acts more as a syntax checker than an actual compiler when you click the Build button in Visual Studio.
+
+###Packaging (building to disk) my (class) library
+
+You can however force the compiler to generate output to disk by setting an option which creates – you guessed it – a NuGet package rather than just an assembly.
+
+Or you can use 'kpm pack'. What about 'kpm build'.
