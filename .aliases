@@ -1,14 +1,17 @@
-# Easier navigation: .., ..., ...., ....., ~ and -
-alias ..="cd .."
+ # Aliases to be consistent with PowerShell (on Windows)
+alias u="cd .."
+alias cls="clear"
 alias cd..="cd .."
+# Easier navigation: .., ..., ...., .....,
+alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
+# Easier navigation: ~ and -
 alias ~="cd ~" # `cd` is probably faster to type though
 alias -- -="cd -"
 
-alias cls="clear"
-
+# Environment variables
 alias show-path='echo $PATH | tr : "\n"'
 
 # Shortcuts
@@ -17,8 +20,8 @@ alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias p="cd ~/Projects"
 alias g="git"
-#alias h="history"
-#alias j="jobs"
+alias h="history"
+alias j="jobs"
 alias rb=rbenv
 
 # ST3 data directory aliases
