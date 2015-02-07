@@ -82,6 +82,8 @@ function doIt() {
   echo ""
   sync "$rootFolder" "$HOME" excludes[@]
 
+  echo ""
+  echo "Reloading .bash_profile..."
   source "$HOME/.bash_profile"
 }
 
