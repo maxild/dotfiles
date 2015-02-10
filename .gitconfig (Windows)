@@ -6,6 +6,9 @@
   # conversions, and therefore this setting will never be relevant!!!
   autocrlf = true
 
+  editor = "'c:/Program Files/Sublime Text 3/sublime_text.exe' -n -w"
+
+
 [credential]
 
   helper = !'C:\\Users\\mom\\AppData\\Roaming\\GitCredStore\\git-credential-winstore.exe'
