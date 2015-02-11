@@ -8,7 +8,7 @@ There are 5 layers in KRE archtecture:
 3. CLR Native Host (Mono, CLR or CoreCLR): Boot the CLR you are using, and create the AppDomain that all managed code will run in.
 4. Native OS Process: Thin layer bootstrapping the version of the CLR you use (could be klr.exe used when self-hosting during development).
 
-Another high-level view is this:
+Another high-level view is:
 
 1. Application
 2. MVC6, Nancy, SignalR etc. (i.e. other Middleware)
