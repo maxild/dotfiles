@@ -7,6 +7,10 @@ function Get-Dirname ($path) { Split-Path -parent $path }
 $rootFolder = Get-Dirname "$PSCommandPath"
 $buildFolder = Join-Path $rootFolder "build"
 
+if ( !(Test-Path $buildFolder) )  {
+  mkdir $buildFolder
+}
+
 # files to build with platform dependent sections
 $filesToBuild = @(".hgrc", ".hgignore", ".gitconfig", ".gitignore")
 $otherFiles = ".editorconfig .gitattributes .npmrc"
