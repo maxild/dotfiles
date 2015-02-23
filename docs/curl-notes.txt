@@ -1,0 +1,150 @@
+
+###CURL (http://curl.haxx.se/docs/manpage.html)
+
+This tool works on Windows, Linux and OSX. It is a great tool!
+
+General switches:
+
+--ntfs: windows authentication (HTTP NTLM authentication)
+--user (-u): credentials (curl -u username:password URL)
+--verbose (-v): verbose output (see both request and response headers etc)
+
+If you use a Windows SSPI-enabled curl binary and perform Kerberos V5, Negotiate, NTLM or Digest authentication then you can tell curl to select the user name and password from your environment by specifying a single colon with this option: "-u :".
+
+curl -X DELETE --ntlm -u : http://test-borbasravendb/admin/databases/borbas
+
+Misc HTTP switches:
+
+--request (-X): Specify HTTP merhod (verb)
+--location (-L): Follow redirects (301, 302, Location header)
+
+###Piping output
+
+--silent (-s): Silent mode (don't output anything)
+-o:
+-O:
+--write-out (-w): Use output FORMAT after completion (http_code, url_effective, content_type, redirect_url, size_download, size_header, size_request etc...see man page)
+Redirection:
+
+curl -sI -w "\n%{http_code} %{url_effective}\n" : http://google.com
+
+###HTTP methods
+
+If you use CURL to send a request to a server without any request method option in the argument, it will by default use HTTP GET. But using -X option in curl, you can send your required HTTP method to the server.
+
+##POST
+
+Posting xml to the server:
+
+curl -X POST http://example.com/some-path -H "content-type:application/xml" -d somefile.xml
+
+In order to see response headers, and pass data and request headers to the web api:
+
+curl -i -H "Accept: application/json" -X POST -d "firstName=james" http://example.com/users/123
+
+
+
+##PUT
+
+curl -X PUT http://example.com/some-path -H "content-type:application/json" -d somefile.json
+
+curl -i -H "Accept: application/json" -X PUT -d "phone=1-800-999-9999" http://example.com/users/123
+
+
+##DELETE
+
+curl -X DELETE http://example.com/api/user/123
+
+curl -i -H "Accept: application/json" -X DELETE http://example.com/users/123
+
+Pseudo delete
+
+curl -i -H "Accept: application/json" -H "X-HTTP-Method-Override: DELETE" -X POST http://example.com/users/123
+
+##GET
+
+These are all equivalent
+
+curl http://www.google.dk
+
+curl --request GET http://www.google.dk
+
+curl -X GET http://www.google.dk
+
+
+You can pass in query parameters by appending it to the url.
+
+curl --request GET http://www.google.dk?q=mysearch&other=data
+
+The resource uri needs to be quoted if you pass in multiple query parameters separated by ‘&’. If you have spaces in the query values, you should encode them i.e. either use the ‘+’ symbol or %20 instead of the space.
+
+content-negotiation:
+
+curl -i -H "Accept: application/json" http://example.com/users/123
+
+##HEAD
+
+HTTP-servers feature the command HEAD which the --head (-I) uses to get nothing but the header of a document (resource).
+
+Are the following two commands equivalent?
+
+curl -X HEAD http://example.com/api/user/123
+
+curl -i http://example.com/api/user/123
+
+
+##Methods and media types
+
+If your web server does not accept these methods, you will get a 405 error as reply. HTTP 405 means that the server does not accept the HTTP method on that specific URL.
+
+You can also get HTTP unsupported Media Type error as reply, if the server does not accept application/xml format. The HTTP status code for unsupported media type is 415.
+
+###Make request with data
+
+curl -X POST 'http://www.somedomain.com/login/' --data 'username=nils&password=pwd'
+
+curl -X GET 'http://www.youtube.com/results?search_query=my_keyword'
+
+curl -X PUT 'http://www.somedomain.com/api/user/12345/' --data 'email=myemail@gmail.com'
+
+curl -X PUT 'http://www.somedomain.com/api/user/12345/' --data somefile.txt
+
+If there is no equal (=) sign in the parameter passed to the --data switch, then it is considered as a file.
+
+
+###Cookies
+
+curl -b mycookies.txt http://example.com
+
+If there is no equal (=) sign in the parameter passed to the -b switch, then it is considered as a file, from where cookies should be read as input.
+
+curl -b "name=value" http://example.com
+
+###Request Headers
+
+-H option in curl can be used to modify headers. For example, let's modify our Accept and Content-type headers in the request.
+
+curl -H "Accept: application/xml" -H "Content-Type: application/xml" http://example.com
+
+curl -X GET 'http://www.somedomain.com/user/info/' -H 'sessionid:1234567890987654321'
+
+Notice that we are using colon (":") to separate header name from its value.
+
+###Response headers
+
+--head (-I): Fetch the HTTP-header only! (See -X HEAD, --request HEAD)
+--include (-i): Include status and the request headers in the output.
+
+To only see headers
+
+curl -sI http://www.google.dk
+
+To see headers and body
+
+curl -si http://www.google.dk
+
+
+
+
+
+
