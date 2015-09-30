@@ -11,7 +11,7 @@
 
 [credential]
 
-  helper = !'C:\\Users\\mom\\AppData\\Roaming\\GitCredStore\\git-credential-winstore.exe'
+  helper = !'C:\\Users\\%USERNAME%\\AppData\\Roaming\\GitCredStore\\git-credential-winstore.exe'
 
 [difftool "bcomp"]
   trustExitCode = true
