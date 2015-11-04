@@ -1,0 +1,61 @@
+
+Subgraphs: Revision spec
+
+The revision spec contains a set of positive references (starting points) and negative references (stopping points), and additional filters (limit number of revisions, grep commit text etc). Git starts with the positive references and goes back through the revision history, stopping when it encounters revisions that are reachable from the negative references (not necessarily just when it reaches one of the negative references themselves).
+
+single commitish
+================
+
+When you just say "origin/master", then that means "origin/master" is a positive reference and there are no negative references. So git starts at origin/master and walks back through all the revisions available -- you get the complete history of origin/master.
+
+double dot
+==========
+
+"origin/master.." is shorthand for "origin/master..HEAD" which looks kind of like it means "from origin/master up to HEAD". It shows commits on the current branch, that have not been pushed.
+
+It can be rewritten as "HEAD ^origin/master" or "HEAD --not origin/master". This better reflects that HEAD is a positive reference and "origin/master" is a negative reference. So always try to think of "A..B" as "revisions in B that are not in A", and remember that omitting A or B means "HEAD".
+
+So git starts at HEAD and walks back through the graph until it encounters a revision that is reachable from origin/master. It is likely that it will encounter origin/master itself, in fact.
+
+Note that all the references are inclusive -- the positive references themselves are output, and the negative references aren't (unless you give --boundary, and then they're flagged). That means that "origin/master..HEAD" outputs nothing if HEAD and origin/master are the same revision.
+
+Note that "git log ..origin/master" does the opposite -- tries to walk back from origin/master to HEAD. If on (local) master, it won't print anything. But if I checked out "origin/maint", it would print the revisions on origin/master that were not on origin/maint.
+
+Triple dot
+==========
+
+What "A...B" means is the revisions in either A or B that are not in any of the merge bases for A and B. In math this is the union of A and B, minus the intersection of A and B.
+
+Note that A...B is always equal to B...A.
+
+So if A and B are on divergent branches, it shows all the commits made on either since they diverged.
+
+In the case of A and B being in a line of revisions, then there is no real difference. That is if one (say A) is the ancestor of the other (say B), then
+A..B (B, not in A) is equal to A...B.
+
+Final note
+==========
+
+And finally for mega-bonus confusion, commands like "git diff" accept the same sort of shorthand syntax, but it doesn't mean (quite) the same thing. git diff actually takes two revisions and compares them, which is not the same as a range -- remember that a revision range in git is a subgraph, not just a list. "git diff A..B" is equivalent to "git diff A B". "git diff A...B" means "show the changes in B since it diverged from A".
+
+Confusing? Just a bit: for example, "git log A...B" and "git log B...A" mean the same thing, but "git diff A...B" and "git diff B...A" don't.
+
+
+Reachable commits
+=================
+
+git rev-list should be able to walk back from a commit (B), up until another commit (A), if reachable.
+
+'git rev-list --boundary A..B' would output (Boundary commits are prefixed with '-', and the list is in reverse chronological order)
+
+sha-of-B
+some-sha
+some-sha
+-sha-of-A
+
+if A is reachable from B. If A is not reachable from B, no output would be given by the command.
+
+If one of commits (A and B) is a branch tip, then 'git branch --contains <commit>' or 'git branch --merged <commit>' might be better solutions.
+
+git merge-base --is-ancestor <commit> <commit> is a programmatic solution (have to inspect last exit code in terminal)
+
