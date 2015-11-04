@@ -11,12 +11,12 @@
 
 [credential]
 
-  helper = !'C:\\Users\\mom\\AppData\\Roaming\\GitCredStore\\git-credential-winstore.exe'
+  helper = !'C:\\Users\\%USERNAME%\\AppData\\Roaming\\GitCredStore\\git-credential-winstore.exe'
 
 [difftool "bcomp"]
   trustExitCode = true
-  cmd = \"c:/program files (x86)/beyond compare 4/bcomp.exe\" \"$LOCAL\" \"$REMOTE\"
+  cmd = \"c:/program files/beyond compare 4/bcomp.exe\" \"$LOCAL\" \"$REMOTE\"
 
 [mergetool "bcomp"]
   trustExitCode = true
-  cmd = \"c:/program files (x86)/beyond compare 4/bcomp.exe\" \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+  cmd = \"c:/program files/beyond compare 4/bcomp.exe\" \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"

@@ -22,8 +22,9 @@ git pull origin master
 function build($files) {
   Foreach ($file in $files)
   {
-    # Concatenate base and windows-platform specific files
-    cat "$file (Base)", "$file (Windows)" | Out-File -Encoding UTF8 $(Join-Path $buildFolder $file)
+    $outfile = Join-Path $buildFolder $file
+    Get-Content "$file (Base)" | Out-File -Encoding UTF8 $outfile
+    Get-Content "$file (Windows)" | ForEach-Object { [Environment]::ExpandEnvironmentVariables($_) } | Out-File -Append -Encoding UTF8 $outFile
   }
 }
 
