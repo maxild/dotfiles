@@ -242,7 +242,16 @@ function o() {
 # `less` with options to preserve color and line numbers, unless the output is
 # small enough for one screen.
 function tre() {
-	tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
+	tree -aC -I '.DS_Store|.git|node_modules|bower_components' --dirsfirst -- "$@" | less -FRNX
+}
+
+# tre with arguments used in 'exclude-pattern'. This way subfolders or files can be excluded
+function trex() {
+    local pattern=""
+    for arg in "$@"; do
+        pattern="${pattern}|${arg}"
+    done
+    tree -aC -I ".DS_Store|.git|node_modules|bower_components${pattern}" --dirsfirst | less -FRNX
 }
 
 # http://stackoverflow.com/questions/3327013/how-to-determine-the-current-shell-im-working-on
@@ -250,7 +259,7 @@ function shell() {
 	#ps | grep `echo $$` | awk '{ print $4 }';
 	#ps -p $$ | tail -1 | awk '{print $NF}'
 	ps -p $$ | tail -1 | awk '{print $4}';
-} 
+}
 
 # set default shell to bash
 function use_bash() {
