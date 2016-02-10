@@ -6,18 +6,28 @@ if [ -d "$HOME/bin" ]; then
   export PATH="$HOME/bin:$PATH";
 fi
 
+# type 'code .' in command line to open folder in visual studio code
+function code () {
+    VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $*;
+}
+
 # Load the dotfiles:
 # * ~/.path can be used to extend `$PATH`.
 # * ~/.extra can be used for other settings you don’t want to commit.
 for file in ~/.{path,bash_prompt,exports,aliases,functions,extra}; do
-	[[ -f "$file" ]] && [[ -r "$file" ]] && source "$file";
+    if [[ -f "$file" ]]; then
+        if [[ ! -r "$file" ]]; then
+            echo "$file is not readable by you."
+            chmod u+r "$file"
+        fi
+        if [[ ! -x "$file" ]]; then
+            echo "$file is not executable by you."
+            chmod u+x "$file"
+        fi
+        source "$file"
+    fi
 done;
 unset file;
-
-# Initialize 'K Runtime Version Manager' (kvm tool in ASP.NET 5)
-if which kvm.sh > /dev/null; then
-  source kvm.sh
-fi
 
 # Initialize z. See https://github.com/rupa/z
 # Installed by running install-deps.sh

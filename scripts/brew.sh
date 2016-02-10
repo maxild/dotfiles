@@ -88,6 +88,11 @@ brew install tree
 #brew install webkit2png
 #brew install zopfli
 
+# http://stackoverflow.com/questions/1515730/is-there-a-command-like-watch-or-inotifywait-on-the-mac
+brew install watchman
+brew install fswatch
+
+
 # Install Node.js. Note: this installs `npm` too, using the recommended
 # installation method.
 #brew install node

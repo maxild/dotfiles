@@ -1,0 +1,62 @@
+
+###Version Ranges
+
+The versions found in project.json borrows from nuget versions (https://docs.
+nuget.org/create/versioning) which again borrows from Maven (http://maven.apache.org/enforcer/enforcer-rules/versionRanges.html).
+
+The syntax also borrows from mathematical intervals.
+
+1.0     x >= 1.0
+(,1.0]  x <= 1.0
+(,1.0)  x < 1.0
+[1.0]   x == 1.0
+[1.0,)  x >= 1.0
+(1.0,)  x > 1.0
+(1.0,2.0)       1.0 < x < 2.0
+[1.0,2.0]       1.0 <= x <= 2.0
+(,1.0],[1.2,)   x <= 1.0 or x >= 1.2. Multiple sets are comma-separated
+(,1.1),(1.1,)   x != 1.1
+
+
+1.0  = 1.0 ≤ x
+(,1.0]  = x ≤ 1.0
+(,1.0)  = x < 1.0
+[1.0] = x == 1.0
+(1.0) = invalid
+(1.0,) = 1.0 < x
+(1.0,2.0) = 1.0 < x < 2.0
+[1.0,2.0] = 1.0 ≤ x ≤ 2.0
+empty = latest version.
+
+The version ranges can be specified in the *.nuspec file (if you are building using nuget.exe), or inside the project.json (if you are building using the KRuntime).
+
+###Picking the right version
+
+Having a version range is only half of the puzzle. The other half is to be able to pick the best version among all the candidates that are available.
+
+The version resolution used by NuGet is to always pick the lowest version of a dependency that fits in the range.
+
+The crucial point is that if your code and your dependencies state that they can use any version of a library/package, they are not getting forced into using anything higher than necessary.
+
+###SemVer
+
+Semantic Versioning (SemVer) describes a way for authors to define versions in a way that they have a consistent semantic. In a nutshell, semantic versions look like Major.Minor.Patch, such that:
+
+* A change in Major is a breaking change
+* A change in Minor adds functionality but is non-breaking
+* A change in Patch represents a bug fix
+
+The use of this versioning scheme is not widely adopted today, but I think it would be beneficial if component authors (and NuGet package authors) followed it more.
+
+Technically, if all components actually honored SemVer, we could always safely move from 1.0 to 1.1, as it would be guaranteed to be a non-breaking upgrade. But in practice, this would not work well today given how a change in Minor version (Y) does often contain breaking changes.
+It is also worth noting that the NuGet algorithm described above makes this mostly unnecessary, because there is no reason to use 1.1 if the component asks for 1.0. Unless of course some other component needs 1.1, in which case we would use it.
+
+###Strong naming
+
+If you are using SemVer as it is meant to be use, then maybe it is a good idea to strip the excessive Minor, Patch and trainling zero (.0) parts at the end for AssemblyVersion. In other words, something like this:
+
+AssemblyVersion="2"
+AssemblyFileVersion="2.1.0.0"
+AssemblyInformationalVersion="2.1.0-beta-<buildmetadata>"
+
+Then the assemblies can be used and updated without any binding redirects having to be created. If the major version changes it is not supposed to be backwards compatible anymore anyway, and failing with a major upgrade is actually in compliance with semantic versioning.

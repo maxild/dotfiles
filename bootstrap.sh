@@ -84,7 +84,7 @@ function doIt() {
 
   echo ""
   echo "Reloading .bash_profile..."
-  source "$HOME/.bash_profile"
+  source ~/.bash_profile
 }
 
 if [[ "$1" == "--build" || "$1" == "-b" ]]; then
