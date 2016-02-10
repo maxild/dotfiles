@@ -5,7 +5,7 @@ The command line tool, NuGet.exe, will download and unpack packages, but it won'
 ###project.json
 
 
-frameworkAssemblies: The frameworkAssemblies section is specific to a target framework. This is a dependency that will not fallback to be downloaded via a NuGet feed. This corresponds to adding a reference/GAC assembly. Typically used with net40 and net45 target frameworks. These won't be restored using kpm restore and they'll be put in the frameworkAssemblies section when generating the nupkg.
+frameworkAssemblies: The frameworkAssemblies section is specific to a target framework. This is a dependency that will not fallback to be downloaded via a NuGet feed. This corresponds to adding a reference/GAC assembly. Typically used with net40 and net45 target frameworks. These won't be restored using dnx (dotnet) restore and they'll be put in the frameworkAssemblies section when generating the nupkg.
 
 dependencies: The are just like project references under the KRuntime. Or Nuget references. When this project uses this ‘project reference’ it pulls the source code for the referenced project and compiles it on the fly (using Roslyn) and executes it.
 
@@ -36,4 +36,6 @@ In aspnet5 (vNext) the compiler acts more as a syntax checker than an actual com
 
 You can however force the compiler to generate output to disk by setting an option which creates – you guessed it – a NuGet package rather than just an assembly.
 
-Or you can use 'kpm pack'. What about 'kpm build'.
+Or you can use 'dnx pack'. What about 'dnx build'.
+
+Note: kpm was renamed dnx, dnx is to be renamed dotnet, when CLI releases.

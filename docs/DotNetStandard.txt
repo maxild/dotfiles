@@ -1,0 +1,121 @@
+##.NET Standard
+
+See:
+
+https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/standard-platform.md
+
+http://docs.nuget.org/consume/projectjson-format
+
+
+
+OBS: The earliest .NET Framework to support a .NET Platform Standard version is .NET Framework 4.5. This is because the new portable API surface area (aka System.Runtime based surface area) that is used as the foundation for the .NET Platform Standard only became available in that version of .NET Framework. Targeting .NET Framework <= 4.0 requires multi-targeting.
+
+The core library is the assembly that defines the primitive types, such as System.Object and System.Int32, that get special handling in metadata. Originally the core library was mscorlib.dll. In more recent versions, it’s System.Runtime.dll.
+
+The core library is the assembly that defines primitive types such as System.Object and System.Int32. You cannot assume a name for the core library. In the .NET Framework 4.5, the core library is mscorlib.dll (i.e. when compiling for the desktop). In .NET Core it is System.Runtime.dll, defined in the corefx repo. mscorlib is defined in the coreclr, and its implementation is OS specific (System.Runtime is OS agnostic).
+
+By default, the C# compiler will use the reference assemblies of the runtime version they shipped with. These assemblies are located in one of the version folders under %FrameworkDir%. We recommend that you avoid this default behavior, even if you’re compiling for the default runtime version. For example, installing a .NET Framework service pack makes that service pack the new default version, which may not be what you intended.
+
+For C#, use the /reference option (short form /r) to specify the necessary reference assemblies. For C#, you must specify the exact paths.
+
+For Visual Basic, specify the path to the multi-targeting pack folder, by using the /sdkpath option. This is also performed by DNX SDK.
+
+For C# specify the /nostdlib option. Otherwise, the compiler uses the core library of the runtime the compiler shipped with, even if you use the /reference option to specify a different version.
+
+For C#, additionally specify the /noconfig option to prevent the compiler from using the csc.rsp file, which references all the assemblies that ship with the .NET Framework.
+
+Warning: Using the csc.rsp file means that if you forget to explicitly specify a reference assembly, you will not get a warning from the compiler; instead, you will reference the wrong version of the reference assembly. This is bad!
+
+Example:
+
+Csc.exe /target:library /nostdlib /noconfig /r:”C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\mscorlib.dll” /r:”C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\system.dll” mytest.cs
+
+##Package authoring
+
+When building a NuGet package, specifying folders named for platform monikers is enough to indicate what platforms your package targets.
+
+MyPackage
+
+MyPackage/lib/netstandard1.3/MyPackage.dll
+The above package targets .NET Platform 1.3 (.NET Platform Standard 1.3)
+
+With .NET Platform Standard versions, and NuGet v3, we have introduced a more formal approach to making these kinds of packages.
+
+PCLCrypto would change to look like the following:
+
+PCLCrypto/1.0.80/lib/Xamarin.iOS/PCLCrypto.dll
+PCLCrypto/1.0.80/lib/monoandroid/PCLCrypto.dll
+PCLCrypto/1.0.80/lib/monotouch/PCLCrypto.dll
+PCLCrypto/1.0.80/lib/win81/PCLCrypto.dll
+PCLCrypto/1.0.80/lib/wp8/PCLCrypto.dll
+PCLCrypto/1.0.80/lib/wpa81/PCLCrypto.dll
+PCLCrypto/1.0.80/ref/netstandard1.0/PCLCrypto.dll
+
+The ref folder (ref being short for "reference assembly") is used to instruct the compiler what assembly should be used for compilation. The .NET Platform Standard version should be chosen such that it covers all of the specific platforms in the package (as indicated by the other sub-folders of "lib").
+
+Lofus/version/lib/tfm/Lofus.dll
+Lofus/version/lib/tfm/Lofus.dll
+Lofus/version/lib/tfm/Lofus.dll
+Lofus/version/lib/tfm/Lofus.dll
+Lofus/version/ref/netstandard1.3/Lofus.dll
+
+OBS: Just multi target....
+
+##Contract Assemblies
+
+Contracts only depend on other contracts not type forwarded assemblies. So the references passed to the compiler must be incorrect.
+
+
+Lets say you have this scenario
+
+Project -> System.ResourceManager 4.0.0 -> System.Runtime 4.0.0.0
+        -> System.Runtime 4.0.20.0
+
+When we resolve dependencies and metadata references. You should get:
+
+/r: packages/System.Runtime/4.0.20.0/lib/contract/System.Runtime.dll
+/r: packages/System.ResourceManager/4.0.0.0/lib/contract/System.ResourceManager.dll
+
+Your compiler should prefer references passed into it. It should never assumes references come from anywhere else. If System.ResourceManager relies on 4.0.0.0 and I give you 4.0.20.0, use that instead. It's essentially a compile time binding redirect.
+
+##Type forwarding:
+
+Microsoft may change the location of types, and preserve run-time and compile-time compatibility by using type forwarders at run time or as part of multi-targeting packs. Therefore, a compiler or a tool that uses metadata must be able to handle type forwarders.
+
+Type forwarders make it easier to use reference assemblies as a facade, such that Microsoft can overwrite .NET 4 with .NET 4.5 on any machine, and still build and execute code.
+
+Every type that is resolved in an assembly first has to check for the existance of a type forward indicating the type has been moved somewhere else.
+
+// Types in System.Core moved to mscorlib (in .NET 4). This metadata is part of System.Core assembly.
+
+[assembly: TypeForwardedTo(typeof(Lazy<>))]
+[assembly: TypeForwardedTo(typeof(LazyThreadSafetyMode))]
+[assembly: TypeForwardedTo(typeof(Action))]
+[assembly: TypeForwardedTo(typeof(Action<,>))]
+[assembly: TypeForwardedTo(typeof(Action<,,>))]
+[assembly: TypeForwardedTo(typeof(Action<,,,>))]
+
+So, when the C# compiler sees a type forward in System.Core.dll specified by the attribute
+
+[assembly: TypeForwardedTo(typeof(Action))]
+
+the Action type is resolved using the normal C# type resolution rules to [mscorlib]System.Action, and the compiler generates an entry in ExportedType like so:
+
+TypeName: Action
+TypeNamespace: System
+Implementation: assembly reference to mscorlib
+TypeDefId: 0 (type forwards don’t use this field)
+
+this entry is then followed by the core CLR type resolution mechanism so that any references to [System.Core]System.Action are transparently redirected to [mscorlib]System.Action at runtime; assemblies using the forwarded type don’t have to be recompiled.
+
+Both System.Core and mscorlib need to be recompiled, but the assembly using the type forwarded type do not need to recompiled.
+
+Finally, TypeForwardedFromAttribute is the counterpart to TypeForwardedToAttribute; it specifies the assembly a type has been forwarded from (using an assembly name string, rather than a direct metadata assembly reference). However, unlike TypeForwardedTo, this is a normal attribute, has no effect on CLR type resolution, and exists primarily for bookkeeping purposes.
+
+Example:
+
+For example, consider the compilation of MyApp.cs for the .NET Framework 4.5. MyApp.cs uses two third-party libraries: UtilityA.dll, which is compiled with the .NET Framework 4.5, and UtilityB.dll, which is compiled with the .NET Framework 4. MyApp and the two libraries exchange objects that implement the ICommand interface. That is, UtilityA.dll might define a type that implements ICommand, while MyApp and UtilityB.dll might have methods with parameters of type ICommand.
+
+In the .NET Framework 4, ICommand was defined in PresentationCore.dll, but it was moved to System.dll in the .NET Framework 4.5. Therefore, UtilityB.dll references ICommand from PresentationCore.dll, while UtilityA.dll references it from System.dll. This is shown in the following illustration.
+
+The compiler uses the reference assemblies in the .NET Framework 4.5 multi-targeting pack because MyApp.cs targets the .NET Framework 4.5. When the compiler encounters an API in UtilityB.dll that references ICommand from PresentationCore.dll, the compiler discovers the type forwarder in the reference assembly for PresentationCore.dll and follows it to the definition of the type in System.dll. When the compiler compares the references to ICommand in the APIs from UtilityA.dll and UtilityB.dll, it resolves them to the same type, and compilation succeeds.
