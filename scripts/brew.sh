@@ -97,6 +97,12 @@ brew install fswatch
 # installation method.
 #brew install node
 
+#
+brew install mono # Omnisharp requires mono support (Error: Cannot start Omnisharp because Mono version >=4.0.1 is required.)
+
+# Stack is a cross-platform build tool for Haskell (compiler etc)
+brew install haskell-stack # (stack setup, stack install hdevtools, and update path)
+
 # Install yet other useful binaries.
 brew install grc
 brew install mercurial
