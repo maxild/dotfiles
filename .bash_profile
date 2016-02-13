@@ -1,9 +1,24 @@
+
 # Read about dotfiles projects at:
 # http://code.tutsplus.com/tutorials/setting-up-a-mac-dev-machine-from-zero-to-hero-with-dotfiles--net-35449
 
 # Add `~/bin` (users private bin) to the `$PATH`
 if [ -d "$HOME/bin" ]; then
-  export PATH="$HOME/bin:$PATH";
+    export PATH="$HOME/bin:$PATH";
+fi
+
+# DNX loading (dnvm, dnu and dnx tools)
+if [ -e "$HOME/.dnx/dnvm/dnvm.sh" ]; then
+    source ~/.dnx/dnvm/dnvm.sh;
+fi
+
+# ghc (Haskell compiler)
+if [ -d "$HOME/.stack/programs/x86_64-osx/ghc-7.10.3/bin" ]; then
+    export PATH="$HOME/.stack/programs/x86_64-osx/ghc-7.10.3/bin:$PATH";
+fi
+# hdevtools (Haskell devtools)
+if [ -d "$HOME/.local/bin" ]; then
+    export PATH=~/.local/bin:$PATH;
 fi
 
 # type 'code .' in command line to open folder in visual studio code
