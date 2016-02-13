@@ -20,6 +20,10 @@ fi
 if [ -d "$HOME/.local/bin" ]; then
     export PATH=~/.local/bin:$PATH;
 fi
+# cabal install places executables in ~/.cabal/bin
+if [ -d "$HOME/.cabal/bin" ]; then
+    export PATH=~/.cabal/bin:$PATH;
+fi
 
 # type 'code .' in command line to open folder in visual studio code
 function code () {
