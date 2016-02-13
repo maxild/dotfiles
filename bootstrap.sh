@@ -47,7 +47,9 @@ function doIt() {
   # sync builded files (no excludes)
   echo "Syncing build folder..."
   echo ""
-  sync "$buildFolder" "$HOME"
+  # TODO: Why is rsync not working here...
+  #sync "$buildFolder" "$HOME"
+  cp -a "$buildFolder/." ~/
 
   # excludeOptions=
   # for file in "${filesToBuild[@]}"; do
