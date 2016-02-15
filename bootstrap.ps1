@@ -34,7 +34,8 @@ function doIt() {
 
   # sync the files
   $files = $filesToBuild -join " "
-  sync $buildFolder $home $files "robocopyLog1.txt"
+  cp $buildFolder\* $home
+  #sync $buildFolder $home $files "robocopyLog1.txt"
 
   # sync other files
   sync $rootFolder $home $otherFiles "robocopyLog2.txt"
