@@ -47,7 +47,9 @@ function doIt() {
   # sync builded files (no excludes)
   echo "Syncing build folder..."
   echo ""
-  sync "$buildFolder" "$HOME"
+  # TODO: Why is rsync not working here...
+  #sync "$buildFolder" "$HOME"
+  cp -a "$buildFolder/." ~/
 
   # excludeOptions=
   # for file in "${filesToBuild[@]}"; do
@@ -84,7 +86,7 @@ function doIt() {
 
   echo ""
   echo "Reloading .bash_profile..."
-  source "$HOME/.bash_profile"
+  source ~/.bash_profile
 }
 
 if [[ "$1" == "--build" || "$1" == "-b" ]]; then

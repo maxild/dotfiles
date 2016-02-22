@@ -21,7 +21,7 @@ Misc HTTP switches:
 ###Piping output
 
 --silent (-s): Silent mode (don't output anything)
--o:
+-o: write to output file
 -O:
 --write-out (-w): Use output FORMAT after completion (http_code, url_effective, content_type, redirect_url, size_download, size_header, size_request etc...see man page)
 Redirection:

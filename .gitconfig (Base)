@@ -1,7 +1,9 @@
 [alias]
 
     # View abbreviated SHA, description, and history graph of the latest 20 commits
-    l = log --pretty=oneline -n 20 --graph --abbrev-commit
+    l = log --pretty=oneline -n 20 --graph --decorate --abbrev-commit
+
+    lol = log --graph --oneline --decorate --date=relative -n 20 --all
 
     # View the current working tree status using the short format
     s = status -s
@@ -146,11 +148,15 @@
     prompt = false
 
 [push]
-
-    # Use the Git 1.x.x default to avoid errors on machines with old Git
-    # installations. To use `simple` instead, add this to your `~/.extra` file:
-    # `git config --global push.default simple`. See http://git.io/mMah-w.
-    default = matching
+    # push the current branch back to the branch whose changes are usually integrated
+    # into the current branch (which is called @{upstream}) with the added safety to
+    # refuse to push if the upstream branch’s name is different from the local one.
+    # This mode only makes sense if you are pushing to the same repository you would normally
+    # pull from (i.e. central workflow).
+    default = simple
+    # enable --follow-tags option by default. You may override this configuration at push time
+    # by specifying --no-follow-tags.
+    followTags = true
 
 # URL shorthands
 

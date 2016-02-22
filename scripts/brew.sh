@@ -88,9 +88,20 @@ brew install tree
 #brew install webkit2png
 #brew install zopfli
 
+# http://stackoverflow.com/questions/1515730/is-there-a-command-like-watch-or-inotifywait-on-the-mac
+brew install watchman
+brew install fswatch
+
+
 # Install Node.js. Note: this installs `npm` too, using the recommended
 # installation method.
 #brew install node
+
+#
+brew install mono # Omnisharp requires mono support (Error: Cannot start Omnisharp because Mono version >=4.0.1 is required.)
+
+# Stack is a cross-platform build tool for Haskell (compiler etc)
+brew install haskell-stack # (stack setup, stack install hdevtools, and update path)
 
 # Install yet other useful binaries.
 brew install grc

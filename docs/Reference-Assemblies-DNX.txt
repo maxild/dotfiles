@@ -1,0 +1,17 @@
+Reference Assemblies and DNX
+
+See: http://stackoverflow.com/questions/34136228/unable-to-resolve-assembly-reference-issue-without-frameworkassemblies
+
+you can add it like
+
+"frameworkAssemblies": {
+  "System.Runtime": {
+    "type": "build",
+    "version": "...."
+  }
+}
+
+so it doesn't get into the final nuspec file, which should be the cleaner solution.
+
+adding facades (reference assemblies) like System.Runtime as framework assemblies in the project.json leads to entries in the nuspec file, if dnu pack is used to generate a nuget package. Using "type": "build" leads to a successful build, since it gets included for compilation, but the nuget package nuspec doesn't reference it -- the facade only contains type forwards anyway.
+

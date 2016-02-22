@@ -1,23 +1,52 @@
+
 # Read about dotfiles projects at:
 # http://code.tutsplus.com/tutorials/setting-up-a-mac-dev-machine-from-zero-to-hero-with-dotfiles--net-35449
 
 # Add `~/bin` (users private bin) to the `$PATH`
 if [ -d "$HOME/bin" ]; then
-  export PATH="$HOME/bin:$PATH";
+    export PATH="$HOME/bin:$PATH";
 fi
+
+# DNX loading (dnvm, dnu and dnx tools)
+if [ -e "$HOME/.dnx/dnvm/dnvm.sh" ]; then
+    source ~/.dnx/dnvm/dnvm.sh;
+fi
+
+# ghc (Haskell compiler)
+if [ -d "$HOME/.stack/programs/x86_64-osx/ghc-7.10.3/bin" ]; then
+    export PATH="$HOME/.stack/programs/x86_64-osx/ghc-7.10.3/bin:$PATH";
+fi
+# hdevtools (Haskell devtools)
+if [ -d "$HOME/.local/bin" ]; then
+    export PATH=~/.local/bin:$PATH;
+fi
+# cabal install places executables in ~/.cabal/bin
+if [ -d "$HOME/.cabal/bin" ]; then
+    export PATH=~/.cabal/bin:$PATH;
+fi
+
+# type 'code .' in command line to open folder in visual studio code
+function code () {
+    VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $*;
+}
 
 # Load the dotfiles:
 # * ~/.path can be used to extend `$PATH`.
 # * ~/.extra can be used for other settings you don’t want to commit.
 for file in ~/.{path,bash_prompt,exports,aliases,functions,extra}; do
-	[[ -f "$file" ]] && [[ -r "$file" ]] && source "$file";
+    if [[ -f "$file" ]]; then
+        if [[ ! -r "$file" ]]; then
+            echo "$file is not readable by you."
+            chmod u+r "$file"
+        fi
+        if [[ ! -x "$file" ]]; then
+            echo "$file is not executable by you."
+            chmod u+x "$file"
+        fi
+        source "$file"
+    fi
 done;
 unset file;
-
-# Initialize 'K Runtime Version Manager' (kvm tool in ASP.NET 5)
-if which kvm.sh > /dev/null; then
-  source kvm.sh
-fi
 
 # Initialize z. See https://github.com/rupa/z
 # Installed by running install-deps.sh
