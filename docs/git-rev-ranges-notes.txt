@@ -1,4 +1,10 @@
 
+Ancestry References
+===================
+
+HEAD^ first parent of head. HEAD^2 second parent of HEAD (only found if HEAD is a merge commit). HEAD~ is also the first parent of HEAD. If a number follows ~ the difference is significant. HEAD~2 means “the first parent of the first parent,” or “the grandparent”.
+
+
 Subgraphs: Revision spec
 
 The revision spec contains a set of positive references (starting points) and negative references (stopping points), and additional filters (limit number of revisions, grep commit text etc). Git starts with the positive references and goes back through the revision history, stopping when it encounters revisions that are reachable from the negative references (not necessarily just when it reaches one of the negative references themselves).
@@ -8,7 +14,7 @@ single commitish
 
 When you just say "origin/master", then that means "origin/master" is a positive reference and there are no negative references. So git starts at origin/master and walks back through all the revisions available -- you get the complete history of origin/master.
 
-double dot
+double dot (commits reachable by one commit until another commit is found)
 ==========
 
 "origin/master.." is shorthand for "origin/master..HEAD" which looks kind of like it means "from origin/master up to HEAD". It shows commits on the current branch, that have not been pushed.
@@ -21,7 +27,7 @@ Note that all the references are inclusive -- the positive references themselves
 
 Note that "git log ..origin/master" does the opposite -- tries to walk back from origin/master to HEAD. If on (local) master, it won't print anything. But if I checked out "origin/maint", it would print the revisions on origin/master that were not on origin/maint.
 
-Triple dot
+Triple dot (commits reachable by two commits)
 ==========
 
 What "A...B" means is the revisions in either A or B that are not in any of the merge bases for A and B. In math this is the union of A and B, minus the intersection of A and B.
