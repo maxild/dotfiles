@@ -1,0 +1,16 @@
+# Use 'git config --get-urlmatch http http://some.example.url' to see http (section) specific values.
+# (See also https://github.com/git/git/commit/d4770964d5058a679ebfc051acceb7968a831f84)
+# This will make git contact the tfs server and prompt for credentials (user and password)
+[http "http://tfs05te:8080/tfs"]
+  proxy =
+# This will only prompt for windows password (user.name and user.email will be used to identify committer)
+[http "http://mom@tfs05te:8080/tfs"]
+  proxy =
+
+[http]
+  sslVerify = false
+  sslCAInfo = C:/Users/%USERNAME%/curl-ca-bundle.crt
+[https]
+  proxy = %http_proxy%
+  sslVerify = false
+  sslCAInfo = C:/Users/%USERNAME%/curl-ca-bundle.crt

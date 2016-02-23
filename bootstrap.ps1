@@ -12,8 +12,8 @@ if ( !(Test-Path $buildFolder) )  {
 }
 
 # files to build with platform dependent sections
-$filesToBuild = @(".hgrc", ".hgignore", ".gitconfig", ".gitignore")
-$otherFiles = ".editorconfig .gitattributes .npmrc"
+$filesToBuild = @(".hgrc", ".hgignore", ".gitconfig", ".gitignore", ".npmrc")
+$otherFiles = "curl-ca-bundle.crt .editorconfig .gitattributes"
 
 cd "$rootFolder"
 
@@ -24,7 +24,13 @@ function build($files) {
   {
     $outfile = Join-Path $buildFolder $file
     Get-Content "$file (Base)" | Out-File -Encoding UTF8 $outfile
-    Get-Content "$file (Windows)" | ForEach-Object { [Environment]::ExpandEnvironmentVariables($_) } | Out-File -Append -Encoding UTF8 $outFile
+    if (Test-Path "$file (Windows)") {
+        Get-Content "$file (Windows)" | % { [Environment]::ExpandEnvironmentVariables($_) } | Out-File -Append -Encoding UTF8 $outFile
+    }
+    # Corporate (windows only) http_proxy settings
+    if ((Test-Path "$file (Proxy)") -and ($env:http_proxy -ne $NULL)) {
+        Get-Content "$file (Proxy)" | % { [Environment]::ExpandEnvironmentVariables($_) } | Out-File -Append -Encoding UTF8 $outFile
+    }
   }
 }
 
@@ -33,9 +39,7 @@ function doIt() {
   build $filesToBuild
 
   # sync the files
-  $files = $filesToBuild -join " "
   cp $buildFolder\* $home
-  #sync $buildFolder $home $files "robocopyLog1.txt"
 
   # sync other files
   sync $rootFolder $home $otherFiles "robocopyLog2.txt"
