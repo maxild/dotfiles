@@ -107,7 +107,7 @@
     # List contributors with number of commits
     contributors = shortlog --summary --numbered
 
-    # merge feature branch into dev branch
+    # merge feature branch into dev branch (TODO: Maybe 1) fetch initially, checking we are not behind, and 2) delete the remote feature branch, if it exists on github/upstream)
     mfb = "!f() { \
         git checkout dev && \
         git merge --no-ff --edit $1 && \
