@@ -28,9 +28,12 @@
     # Switch to a feature branch, creating it if necessary
     gof = "!f() { git checkout -b \"feature/$1\" 2> /dev/null || git checkout \"feature/$1\"; }; f"
 
-    # Show verbose output about tags, branches or remotes
+    # Show verbose output about tags
     tags = tag -l
-    branches = branch -a
+    # A summary of all local branches with their tracking branch and status (ahead/behind)
+    branches = "!f() { git fetch --all && git branch -vv; }; f "
+    #branches = "!f() { git fetch --all > /dev/null && git branch -vv; }; f "
+    # Show verbose output about remotes
     remotes = remote -v
 
     # Amend the currently staged files to the latest commit
