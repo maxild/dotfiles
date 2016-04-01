@@ -25,6 +25,8 @@
 
     # Switch to a branch, creating it if necessary
     go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
+    # Switch to a feature branch, creating it if necessary
+    gof = "!f() { git checkout -b \"feature/$1\" 2> /dev/null || git checkout \"feature/$1\"; }; f"
 
     # Show verbose output about tags, branches or remotes
     tags = tag -l
@@ -52,9 +54,52 @@
     # Find commits by commit message
     fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
 
-    # Remove branches that have already been merged with master
-    # a.k.a. ‘delete merged’
-    dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+    #
+    # Cleanup local branches (current, dev and master cannot be deleted)
+    # that have already been merged into the current branch (i.e. HEAD)
+    # a.k.a. ‘delete merged branches’
+    #
+
+    dmb = "!git branch --merged | grep -v '\\*\\|dev\\|develop\\|master' | xargs -n 1 git branch -d"
+    # See what-if (-n flag on clean reused)
+    dmbn = "!git branch --merged | grep -v '\\*\\|dev\\|develop\\|master' | xargs -n 1 echo"
+
+    #  1) git branch --merged ${1-dev} lists all the branches that have been merged
+    #  into the specified branch (or dev if none is specified).
+    #  2) The grep command will list all merged branches that are not dev, master or the specified branch itself.
+    #dm = "!f() { git branch --merged ${1-dev}$ | grep -v '${1-dev}$|dev|develop|master' | xargs -r git branch -d; }; f"
+    #dmn = "!f() { git branch --merged ${1-dev}$ | grep -v '${1-dev}$|dev|develop|master' | xargs -r echo; }; f"
+
+    #
+    # After each git pull or git fetch command Git creates references to remote branches
+    # in local repository, but doesn’t clean up stale references.
+    #
+
+    # prune all stale remote refs
+    drb = "!f() { git remote prune ${1-origin}; }; f"
+    # Fetch and have Git automatically prune all stale remote refs
+    f = "!f() { git fetch -p ${1-origin}; }; f"
+
+    # show all remote branches
+    rb = "!f() { \
+        for branch in `git branch -r | grep -v HEAD`; \
+        do echo -e `git show --format=\"%ci %cr %an\" $branch | head -n 1` $branch; \
+        done | sort -r; \
+    }; f"
+
+    # show remote branches that have been merged (and decide if any should be deleted: git push origin --delete branch-name)
+    rbm = "!f() { \
+        for branch in `git branch -r --merged | grep -v HEAD`; \
+        do echo -e `git show --format=\"%ci %cr %an\" $branch | head -n 1` $branch; \
+        done | sort -r; \
+    }; f"
+
+    # show remote branches that have not been merged
+    rbnm = "!f() { \
+        for branch in `git branch -r --no-merged | grep -v HEAD`; \
+        do echo -e `git show --format=\"%ci %cr %an\" $branch | head -n 1` $branch; \
+        done | sort -r; \
+    }; f"
 
     # List contributors with number of commits
     contributors = shortlog --summary --numbered
