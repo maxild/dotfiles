@@ -35,6 +35,10 @@
     #branches = "!f() { git fetch --all > /dev/null && git branch -vv; }; f "
     # Show verbose output about remotes
     remotes = remote -v
+    # List all aliases in config
+    alias = "!f() { git config --get-regexp '^alias.'; }; f"
+    # List all aliases in config (cutting out 'alias.' part such that sorting is possible)
+    aliases = "!git config -l | grep '^alias.' | cut -c 7- | sort"
 
     # Amend the currently staged files to the latest commit
     amend = commit --amend --reuse-message=HEAD
