@@ -7,11 +7,6 @@ if [ -d "$HOME/bin" ]; then
     export PATH="$HOME/bin:$PATH";
 fi
 
-# DNX loading (dnvm, dnu and dnx tools)
-if [ -e "$HOME/.dnx/dnvm/dnvm.sh" ]; then
-    source ~/.dnx/dnvm/dnvm.sh;
-fi
-
 # ghc (Haskell compiler)
 if [ -d "$HOME/.stack/programs/x86_64-osx/ghc-7.10.3/bin" ]; then
     export PATH="$HOME/.stack/programs/x86_64-osx/ghc-7.10.3/bin:$PATH";
@@ -24,11 +19,6 @@ fi
 if [ -d "$HOME/.cabal/bin" ]; then
     export PATH=~/.cabal/bin:$PATH;
 fi
-
-# type 'code .' in command line to open folder in visual studio code
-function code () {
-    VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $*;
-}
 
 # Load the dotfiles:
 # * ~/.path can be used to extend `$PATH`.
