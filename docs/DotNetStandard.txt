@@ -2,11 +2,20 @@
 
 See:
 
-https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/standard-platform.md
+https://github.com/dotnet/corefx/blob/master/Documentation/architecture/net-platform-standard.md
 
-http://docs.nuget.org/consume/projectjson-format
+https://gist.github.com/davidfowl/8939f305567e1755412d6dc0b8baf1b7
+
+https://docs.microsoft.com/en-us/dotnet/articles/standard/index
+
+https://docs.microsoft.com/en-us/dotnet/articles/standard/library
+
+https://docs.microsoft.com/en-us/dotnet/articles/core/porting/libraries
 
 
+OBS: If we support netstandard1.3 and want our library to be consumed by net452 applications, then we need to multi-target both netstandard1.3 and net452. This setup is bad because we will then often need #ifdefs in our code (otherwise we didn't need to multi-target in the first place). If we instead could support netstandard1.2 (generally we would want to support the lowest version of netstandard as we possibly can, e.g. JSON.NET supports netstandard1.0) then we could live without multi-targeting, because .NET Framework 452 supports netstandard1.2. This way we will have no #ifdefs in our code.
+
+OBS: The TFM compatibility/mapping rules (between netstandard versions and TFMs) are baked into NuGet.
 
 OBS: The earliest .NET Framework to support a .NET Platform Standard version is .NET Framework 4.5. This is because the new portable API surface area (aka System.Runtime based surface area) that is used as the foundation for the .NET Platform Standard only became available in that version of .NET Framework. Targeting .NET Framework <= 4.0 requires multi-targeting.
 
