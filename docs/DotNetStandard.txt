@@ -12,10 +12,13 @@ https://docs.microsoft.com/en-us/dotnet/articles/standard/library
 
 https://docs.microsoft.com/en-us/dotnet/articles/core/porting/libraries
 
+OBS: netstandard1.0-netstandard1.4 contains existsing stuff ported from full framework. Which is why the new stuff starts at netstandard1.5. David Fowler had the idea during one of his presentations, that the older legacy versions (netstandard1.0-netstandard1.4) start at 0.5 and the first real version starts at 1.0 (i.e. netstandard1.5). Instead of 1.0 - 1.5.
 
 OBS: If we support netstandard1.3 and want our library to be consumed by net452 applications, then we need to multi-target both netstandard1.3 and net452. This setup is bad because we will then often need #ifdefs in our code (otherwise we didn't need to multi-target in the first place). If we instead could support netstandard1.2 (generally we would want to support the lowest version of netstandard as we possibly can, e.g. JSON.NET supports netstandard1.0) then we could live without multi-targeting, because .NET Framework 452 supports netstandard1.2. This way we will have no #ifdefs in our code.
 
-OBS: The TFM compatibility/mapping rules (between netstandard versions and TFMs) are baked into NuGet.
+OBS: The .NETFramework,Version=4.6 (net46) framework represents the available APIs in the .NET Framework 4.6. The .NETStandard,Version=1.3 (netstandard1.3) framework is a package-based framework. It relies on packages that target the framework to define and expose APIs in terms of the framework.
+
+OBS: The TFM compatibility/mapping rules (between netstandard versions and TFMs) are baked into NuGet (v3.4+).
 
 OBS: The earliest .NET Framework to support a .NET Platform Standard version is .NET Framework 4.5. This is because the new portable API surface area (aka System.Runtime based surface area) that is used as the foundation for the .NET Platform Standard only became available in that version of .NET Framework. Targeting .NET Framework <= 4.0 requires multi-targeting.
 
