@@ -12,7 +12,11 @@ https://docs.microsoft.com/en-us/dotnet/articles/standard/library
 
 https://docs.microsoft.com/en-us/dotnet/articles/core/porting/libraries
 
+https://github.com/dotnet/core-docs/blob/master/docs/core/tutorials/libraries.md
+
 OBS: netstandard1.0-netstandard1.4 contains existsing stuff ported from full framework. Which is why the new stuff starts at netstandard1.5. David Fowler had the idea during one of his presentations, that the older legacy versions (netstandard1.0-netstandard1.4) start at 0.5 and the first real version starts at 1.0 (i.e. netstandard1.5). Instead of 1.0 - 1.5.
+
+.Net Core 1.0 is based on netstandard 1.6. netstandard 1.0 is pre .Net Framework 4.5, .NET Framework 4.6.2 is netstandard 1.5
 
 OBS: If we support netstandard1.3 and want our library to be consumed by net452 applications, then we need to multi-target both netstandard1.3 and net452. This setup is bad because we will then often need #ifdefs in our code (otherwise we didn't need to multi-target in the first place). If we instead could support netstandard1.2 (generally we would want to support the lowest version of netstandard as we possibly can, e.g. JSON.NET supports netstandard1.0) then we could live without multi-targeting, because .NET Framework 452 supports netstandard1.2. This way we will have no #ifdefs in our code.
 
