@@ -1,0 +1,134 @@
+Powershell escaping arguments to external applications
+======================================================
+
+See also https://connect.microsoft.com/PowerShell/feedback/details/376207/executing-commands-which-require-quotes-and-variables-is-practically-impossible
+
+http://windowsitpro.com/powershell/running-executables-powershell
+
+Workarounds
+===========
+
+Case 1: escape quotes `" (dowsn't always work, because of powershell parser)
+Case 2: --% (to put ps-parser into CMD mode) and reference env vars as %VAL%
+case 3: Single literal arg and Start-Process
+
+Using the Start-Process cmdlet has a couple of drawbacks:
+
+If you want to capture the executable's output, you need to use the -RedirectStandardOutput parameter. Test3.ps1 in Listing 3 illustrates this technique. This script creates a temporary file, runs the executable (redirecting the output to the temporary file), and retrieves the output using the Get-Content cmdlet.
+The Start-Process cmdlet doesn't update the $LASTEXITCODE variable.
+
+Case 4: cmd /c 'some argument list string'
+Case 5: Start-Executable helper function
+
+
+PROBLEMS:
+=========
+
+PS C:\Documents and Settings\Nick> echo '"hello"'
+"hello"
+PS C:\Documents and Settings\Nick> echo.exe '"hello"'
+hello
+PS C:\Documents and Settings\Nick> echo.exe '\"hello\"'
+"hello"
+
+Case A
+======
+
+Set-Content EchoTest.cmd "Echo %1"
+$test="Hello There"
+.\echotest.cmd $test
+
+Expected Output:
+Hello
+
+Actual Output:
+"Hello There"
+
+Note the quotes
+
+Now try
+Set-Content EchoTest.cmd "Echo %1"
+$test="Hello"
+.\echotest.cmd $test
+
+Expected Output
+Hello
+
+Actual Output:
+Hello
+
+Note no quotes
+
+The moment you put a space in a string, Powershell "helpfully" adds quotes to it when passing to the command.... Why?
+
+Case B
+======
+
+
+Here is an example of something that I can't do in PowerShell 3.0:
+
+MSDeploy.exe -verb:delete -verbose -dest:contentPath='$SiteName/App_Offline.htm',computerName='$SiteManagementUrl'
+
+This attempt fails:
+
+& $MSDeploy -verb:delete -verbose $("-dest:contentPath='{0}',computerName='{1}'" -f $ContentPath, $SiteManagementEndpoint)
+
+with:
+
+MSDeploy.exe : Error: Unrecognized argument '"-dest:contentPath='My Site/App_Offline.htm',computerName='https://webnode:8172/MSDeploy.axd?Site=My+Site'"'. All arguments must begin with "-".
+
+because of auto-quoting of strings with spaces!!!
+
+Note: The automatic entry of quotes when spaces are in the variable is major problem!!!!!!!!!
+
+Case C
+======
+
+I cannot find out the correct way to invoke something like this:
+
+MSBuild /t:Publish /p:TargetDatabaseName="MyDatabase";TargetConnectionString="Data Source=.\;Integrated Security=True" /p:SqlPublishProfilePath="Deploy.publish.xml" "Database.sqlproj"
+
+I am using this command:
+
+$DatabaseConnectionString = "Data Source=.\;Integrated Security=True"
+MSBuild /t:Publish "/p:TargetDatabaseName=`"$DatabaseName`";TargetConnectionString=`"$DatabaseConnectionString`"" /p:SqlPublishProfilePath=`"Deploy.publish.xml`" `"Database.sqlproj`"
+
+and it doesn't work. I have spend 4 hours trying many solutions without success. :/
+
+The --% operator
+================
+
+It essentially puts the PowerShell parsing into a cmd.exe equivalent mode (ie dumb mode) e.g.:
+
+MSBuild /t:Publish --% /p:TargetDatabaseName="MyDatabase";TargetConnectionString="Data Source=.\;Integrated Security=True" /p:SqlPublishProfilePath="Deploy.publish.xml" Database.sqlproj
+
+Or how about this case:
+
+Set-Content EchoTest.cmd "Echo %1"
+$test="Hello There"
+$env:test = $test
+.\echotest.cmd --% %test%
+
+Outputs:
+Hello
+
+Or how about this case:
+
+$env:SiteName = $SiteName
+$env:SiteManagementUrl = $SiteManagementUrl
+MSDeploy.exe --% -verb:delete -verbose -dest:contentPath="%SiteName%/App_Offline.htm",computerName="%SiteManagementUrl%"
+
+If you understand how --% works, it isn't very difficult to get your exe parameters to work just as they did in cmd.exe.
+
+Conclusion
+==========
+
+The outcome is very simple:
+
+- only exe's that follow the Shell32::CommandLineToArgvW Windows quoting/escaping conventions can be used directly by PowerShell, or via Start-Process
+- anything that deviates from these will need a single *literal* argument string constructed and passed to the exe using [Process]::Start. Constructing this string within PowerShell may require some double-escaping, depending on context.
+- For a fixed number of arguments you can also use --% and reference environment variables, as Keith demonstrates below.
+
+Anything that presents an API where arguments are passed as an array (PowerShell, or Start-Process) is *always* going to run into edge cases, since Windows processes are not actually passed an array of arguments (they're passed a single string, and *normally* interpreted by Shell32::CommandLineToArgvW)
+
+It is amazingly frustrating that SQLCMD and MSDEPLOY are the worst culprits here, given the high frequency with which they are automated using PowerShell. Perhaps a better campaign would be for these applications to fix their command-line parsing conventions...
