@@ -10,8 +10,8 @@
 
 [difftool "bcomp"]
   trustExitCode = true
-  cmd =  \"c:/program files/beyond compare 4/bcomp.exe\" \"$LOCAL\" \"$REMOTE\"
+  cmd =  \"c:/program files/beyond compare 4/bcomp.com\" \"$LOCAL\" \"$REMOTE\"
 
 [mergetool "bcomp"]
   trustExitCode = true
-  cmd = \"c:/program files/beyond compare 4/bcomp.exe\" \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+  cmd = \"c:/program files/beyond compare 4/bcomp.com\" \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
