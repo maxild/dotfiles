@@ -9,6 +9,9 @@
   editor = "'c:/Program Files/Sublime Text 3/sublime_text.exe' -n -w"
 
 [difftool "bcomp"]
+  # Git For Windows v2.2+ has built-in configuration for Beyond Compare 4
+  # See https://github.com/git/git/blob/master/mergetools/bc
+  # Also see http://www.scootersoftware.com/support.php?zz=kb_vcs#gitwindows
   trustExitCode = true
   cmd =  \"c:/program files/beyond compare 4/bcomp.com\" \"$LOCAL\" \"$REMOTE\"
 
