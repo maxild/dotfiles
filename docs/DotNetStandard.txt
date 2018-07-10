@@ -1,4 +1,4 @@
-##.NET Standard
+## .NET Standard
 
 See:
 
@@ -46,7 +46,7 @@ Example:
 
 Csc.exe /target:library /nostdlib /noconfig /r:”C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\mscorlib.dll” /r:”C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\system.dll” mytest.cs
 
-##Package authoring
+## Package authoring
 
 When building a NuGet package, specifying folders named for platform monikers is enough to indicate what platforms your package targets.
 
@@ -77,7 +77,7 @@ Lofus/version/ref/netstandard1.3/Lofus.dll
 
 OBS: Just multi target....
 
-##Contract Assemblies
+## Contract Assemblies
 
 Contracts only depend on other contracts not type forwarded assemblies. So the references passed to the compiler must be incorrect.
 
@@ -94,7 +94,7 @@ When we resolve dependencies and metadata references. You should get:
 
 Your compiler should prefer references passed into it. It should never assumes references come from anywhere else. If System.ResourceManager relies on 4.0.0.0 and I give you 4.0.20.0, use that instead. It's essentially a compile time binding redirect.
 
-##Type forwarding:
+## Type forwarding:
 
 Microsoft may change the location of types, and preserve run-time and compile-time compatibility by using type forwarders at run time or as part of multi-targeting packs. Therefore, a compiler or a tool that uses metadata must be able to handle type forwarders.
 

@@ -1,6 +1,6 @@
 #.NET Core
 
-##What is .NET Core
+## What is .NET Core
 
 It is based on 4 components:
 
@@ -9,15 +9,15 @@ It is based on 4 components:
 3. coreRT: The native runtime. It is part of the new .NET Native stack, that was announced in november 2015. It will be surfaced through the last component -- The CLI.
 4. CLI: The commandline interface for building dotnet core applications. Can be either .NET Core or .NET Native. It doesn't build MSBuild based projects. It builds project.json based projects!!! First project.json was a DNX concept, then it became a Universal Windows Nuget concept, and now it has become a CLI concept. It supports the following .NET Core application artifacts: i) Class Libraries, ii) Console Applications, iii) ASP.NET Core Applications (also the one that run on the full/desktop framework). In Visual Studio the project system will be XProj based.
 
-An ASP.NET Core application soes not touch any OS specific (global) directories. It does not touch regitsry, system32 etc. The application is just files on a disk (runtimes and packages, distributed via nuget).
+An ASP.NET Core application does not touch any OS specific (global) directories. It does not touch regitsry, system32 etc. The application is just files on a disk (runtimes and packages, distributed via nuget).
 
-The same is tru about .NET CLI native app. You compile all the dependencies into it.
+The same is true about .NET CLI native app. You compile all the dependencies into it.
 
 Another benefit of Core is cross-plat: Linux, Docker etc.
 
 A third benefit is everything works on the commandline, because of cross-plat. You can choose your editor/ide etc. You can even use Notepad...ah no. Your developer can use Mac OS X as a developer machine, and deploy to either Windows or Linux. Tool chain is no longer tied to Visual Studio. Commandline first approach. Of course XProj exists in Visual Studio (but it is orthogonal to commandline first)
 
-##dotnet vs (dnvm, dnu, dnx)
+## dotnet vs (dnvm, dnu, dnx)
 
 dnvm related stuff (versioning of runtimes) no longer exists, because runtimes are getting downloaded/installed just-in-time, based on project.json. So going forward you specify the runtime version in the project.json.
 
@@ -32,15 +32,15 @@ DNX was by design close to NPM.
 .NET CLI is by design closer to Go.
 
 
-##Whats is .NET Framework 4.x
+## What is .NET Framework 4.x
 
 It is an OS component. You can't have net451, net452 and net46 on the same machine. Also you can't upgrade your application to use net46, unless everybody else upgrades, and your dev-ops patch the machine with net46. Also you have to run on Windows, and IIS.
 
-##What is ASP.NET Core
+## What is ASP.NET Core
 
 A new webstack/framework built on top of .NET Core, that also happen to run on the full/desktop .NET Framework.  The folks at MS calls this an App Model.
 
-##ASP.NET 5 is renamed ASP.NET Core
+## ASP.NET 5 is renamed ASP.NET Core
 
 MVC 6 will be namespaced Microsoft.AspNetCore.Mvc etc. etc. Nuget package version will be 1.0.
 
@@ -56,15 +56,15 @@ TFM monikers: netstandard is the way forward (not dnxcore5, dotnet5.1 etc..)
 
 Class Library authors will target netstandard to be able to run on .NET around the world. Apps will target netstandardapp. netstandard has its own version. It will initially come out with 5 (or 6) versions: 1.0, 1.1, 1.2, 1.3, 1.4 and 1.5. netstandard1.5 is equivalent to dnxcore5. It is retrospectively versioned back to the day MS did System.Runtime PCL (Windows 8 Store Apps). netstandard is more like the Java version number. The docs are heavy reading, and the tooling is not finished. Wait for RC2 and RTM.
 
-##Build system
+## Build system
 
 In RC2 csproj will be able to reference xproj, and vice versa. This is reimplemented using the new CLI system. The feature is part of the 'Re-plat' for .NET Core CLI. Should be part of RC2.
 
-##Entity Framework is renamed too
+## Entity Framework is renamed too
 
 EF 7 is now EF Core 1.0
 
-##Release timeline
+## Release timeline
 
 Big changes between RC1 and RC2!!! CLI!!!
 
@@ -78,10 +78,10 @@ Teams will ship something at Build conf march 30-April 1.
 
 NodeServices, AngularServices, ReactServices extensions will ship as a beta when ASP.NET Core RTMs. They will not be ready. Steve is working on that.
 
-##File watcher (nodemon like)
+## File watcher (nodemon like)
 
 dnx-watch is renamed/rewritten to dotnet-watch.
 
-##SignalR
+## SignalR
 
 WebSockets and SignalR will come after 1.0 RTM.
