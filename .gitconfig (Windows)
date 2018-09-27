@@ -8,6 +8,10 @@
 
   editor = "'c:/Program Files/Sublime Text 3/sublime_text.exe' -n -w"
 
+[credential]
+  # Git Credential Manager for Windows
+  helper = manager
+
 [difftool "bcomp"]
   # Git For Windows v2.2+ has built-in configuration for Beyond Compare 4
   # See https://github.com/git/git/blob/master/mergetools/bc
