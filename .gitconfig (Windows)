@@ -1,3 +1,21 @@
+# Beware that 'Git for Windows' will have --system configuration
+# in the file  $(prefix)/etc/gitconfig, where $(prefix) is the directory
+# where GIT is installed (C:\Program Files\Git\mingw64\).
+# Git Credential Manager for Windows is built into Git for Windows
+#
+#     [http]
+#         sslCAInfo = C:/Program Files/Git/mingw64/ssl/certs/ca-bundle.crt
+#         sslBackend = openssl
+#     [diff "astextplain"]
+#         textconv = astextplain
+#     [filter "lfs"]
+#         clean = git-lfs clean -- %f
+#         smudge = git-lfs smudge -- %f
+#         process = git-lfs filter-process
+#         required = true
+#     [credential]
+#         helper = manager
+
 [core]
 
   # Tell Git to convert LF to CRLF on checkout, and to convert back CRLF to LF,
@@ -8,9 +26,10 @@
 
   editor = "'c:/Program Files/Sublime Text 3/sublime_text.exe' -n -w"
 
-[credential]
-  # Git Credential Manager for Windows
-  helper = manager
+# Git for Windows have this configured in --system, see above
+#[credential]
+#  # Git Credential Manager for Windows
+#  helper = manager
 
 [difftool "bcomp"]
   # Git For Windows v2.2+ has built-in configuration for Beyond Compare 4
