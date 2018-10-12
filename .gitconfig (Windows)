@@ -26,10 +26,10 @@
 
   editor = "'c:/Program Files/Sublime Text 3/sublime_text.exe' -n -w"
 
-# Git for Windows have this configured in --system, see above
-#[credential]
-#  # Git Credential Manager for Windows
-#  helper = manager
+[credential]
+# Git for Windows have 'manager' configured in --system, see above
+# Override 'manager' (Git Credential Manager for Windows) from --system
+helper = wincred
 
 [difftool "bcomp"]
   # Git For Windows v2.2+ has built-in configuration for Beyond Compare 4
