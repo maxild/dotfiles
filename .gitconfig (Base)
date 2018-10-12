@@ -211,6 +211,9 @@
     # http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
     precomposeunicode = false
 
+    # Make git log show UTF8 encoded characters properly (-R means Output "raw" control characters)
+    pager = LESSCHARSET=utf-8 less -R
+
 [color]
 
     # Use colors in Git commands that are capable of colored output when
