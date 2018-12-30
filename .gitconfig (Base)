@@ -12,7 +12,7 @@
     a = add
     b = branch
     c = commit
-    d = diff
+    d = difftool
     f = fetch
     g = grep
     l = log
@@ -253,10 +253,9 @@
 
     ## diff ##
 
-    # diff before add/commit
-    d = difftool
     # Show diff of last commit (or the given number of commits ago)
     dlc = "!f() { git difftool --cached HEAD~$1; }; f"
+
     # Show diff of a commit
     dc  = "!f() { git difftool "$1"^.."$1"; }; f"
 
