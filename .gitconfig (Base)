@@ -1,17 +1,257 @@
 [alias]
 
-    # View abbreviated SHA, description, and history graph
-    l = log --graph --oneline --decorate --date=relative
+    # Credits: https://github.com/GitAlias/gitalias/blob/master/gitalias.txt
 
-    # List commits in short form, with colors and branch/tag annotations
-    ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+    ##
+    # One letter alias for our most frequent commands.
+    #
+    # Guidelines: these aliases do not use options, because we want
+    # these aliases to be easy to compose and use in many ways.
+    ##
 
-    # List modified files
-    lsf = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+    a = add
+    b = branch
+    c = commit
+    d = diff
+    f = fetch
+    g = grep
+    l = log
+    m = merge
+    o = checkout
+    p = pull
+    r = remote
+    s = status
+    w = whatchanged
+
+    ### add ###
+
+    # add all
+    aa = add --all
+
+    # add by patch - looks at each change, and asks if we want to put it in the repo.
+    #ap = add --patch
+
+    # add just the files that are updated.
+    #au = add --update
+
+    ### branch ###
+
+    # branch - edit the description
+    be = branch --edit-description
+
+    # branch and only list branches whose tips are reachable from the specified commit (HEAD if not specified).
+    bm = branch --merged
+
+    # branch and only list branches whose tips are not reachable from the specified commit (HEAD if not specified).
+    bnm = branch --no-merged
+
+    ### commit ###
+
+    # commit - amend the tip of the current branch rather than creating a new commit.
+    ca = commit --amend
+
+    # commit - amend the tip of the current branch, and edit the message.
+    cam = commit --amend --message
+
+    # commit - amend the tip of the current branch, and do not edit the message.
+    #cane = commit --amend --no-edit
+
+    # commit interactive
+    ci = commit --interactive
+
+    # commit with a message
+    cm = commit --message
+
+    ### checkout ###
+
+    # checkout - update the working tree to match a branch or paths. [same as "o" for "out"]
+    co = checkout
+
+    # Switch to a branch, creating it (possibly as a local tracking branch) if necessary
+    go = "!f() { git checkout \"$1\" 2> /dev/null || git checkout -b \"$1\"; }; f"
+
+    # Switch to a feature branch, creating it (possibly as a local tracking branch) if necessary
+    gof = "!f() { \
+        branch_name="$1"; \
+        if [[ ! "$branch_name" =~ ^feature/.* ]]; then \
+            branch_name="feature/${branch_name}"; \
+        fi; \
+        git checkout \"${branch_name}\" 2> /dev/null || git checkout -b \"${branch_name}\"; \
+    }; f"
+
+    # Switch to a hotfix branch, creating it (possibly as a local tracking branch) if necessary
+    goh = "!f() { \
+        branch_name="$1"; \
+        if [[ ! "$branch_name" =~ ^hotfix/.* ]]; then \
+            branch_name="hotfix/${branch_name}"; \
+        fi; \
+        git checkout \"${branch_name}\" 2> /dev/null || git checkout -b \"${branch_name}\"; \
+    }; f"
+
+    # Switch to a support branch, creating it (possibly as a local tracking branch) if necessary
+    gos = "!f() { \
+        branch_name="$1"; \
+        if [[ ! "$branch_name" =~ ^support/.* ]]; then \
+            branch_name="support/${branch_name}"; \
+        fi; \
+        git checkout \"${branch_name}\" 2> /dev/null || git checkout -b \"${branch_name}\"; \
+    }; f"
+
+    ### log ###
+
+    # log with a text-based graphical representation of the commit history.
+    lg = log --graph
+
+    # log with one line per item.
+    lo = log --oneline
+
+    # log with first parent, useful for dev branch that merges feature branches/pull requests
+    lfp = log --first-parent
+
+    # log with items appearing in topological order, i.e. descendant commits are shown before their parents.
+    lt = log --topo-order
+
+    # log like - we like this format that shows our key performance indicators, i.e. our useful summary.
+    ll = log --graph --topo-order --abbrev-commit --date=short --decorate --all --boundary --pretty=format:'%Cgreen%ad %Cred%h%Creset -%C(yellow)%d%Creset %s %Cblue[%cn]%Creset %Cblue%G?%Creset'
+
+    # List modified files helper
+    ll-private-helper = log --date=short --decorate --pretty=format:'%Cgreen%ad %Cred%h%Creset -%C(yellow)%d%Creset %s %Cblue[%cn]%Creset %Cblue%G?%Creset' --numstat
+
     # Show modified files of a commit
-    lc  = "!f() { git lsf "${1-HEAD}"^.."${1-HEAD}"; }; f"
+    lc  = "!f() { git ll-private-helper "${1-HEAD}"^.."${1-HEAD}"; }; f"
+
     # Show modified files in last commit (or the given number of commits ago)
-    llc  = "!f() { git lsf "HEAD~$1"^.."HEAD~$1" ; }; f"
+    llc  = "!f() { git ll-private-helper "HEAD~$1"^.."HEAD~$1" ; }; f"
+
+    ## ls-files ##
+
+    # ls-files - show information about files in the index and the working tree; like Unix "ls" command.
+    ls = ls-files
+
+    # list files that git has ignored.
+    ls-ignored = ls-files --others --i --exclude-standard
+
+    ### merge ###
+
+    # merge but without autocommit, and with a commit even if the merge resolved as a fast-forward.
+    me = merge --no-commit --no-ff
+
+    # Merge branch into current HEAD, and with a (merge) commit even if the merge resolved as a fast-forward.
+    mea = "!f() { git merge --no-ff --edit $1; }; f"
+
+    # merge feature branch into dev branch (TODO: Maybe 1) fetch initially,
+    # checking we are not behind, and 2) delete the remote feature branch,
+    # if it exists on github/upstream)
+    mefb = "!f() { \
+        branch_name="$1"; \
+        if [[ ! "$branch_name" =~ ^feature/.* ]]; then \
+            branch_name="feature/${branch_name}"; \
+        fi; \
+        git checkout dev && \
+        git merge --no-ff --edit "${branch_name}" && \
+        git branch -d "${branch_name}"; \
+    }; f"
+
+    # Merge GitHub pull request on top of the `master` branch
+    mepr = "!f() { \
+        if [ $(printf \"%s\" \"$1\" | grep '^[0-9]\\+$' > /dev/null; printf $?) -eq 0 ]; then \
+            git fetch origin refs/pull/$1/head:pr/$1 && \
+            git rebase master pr/$1 && \
+            git checkout master && \
+            git merge pr/$1 && \
+            git branch -D pr/$1 && \
+            git commit --amend -m \"$(git log -1 --pretty=%B)\n\nCloses #$1.\"; \
+        fi \
+    }; f"
+
+    ### pull ###
+
+    # Pull in remote changes for the current repository and all its submodules
+    #p = !"git pull; git submodule foreach git pull origin master"
+
+    # pull if a merge can be resolved as a fast-forward, otherwise fail.
+    pf = pull --ff-only
+
+    ### rebase ###
+
+    # rebase - forward-port local commits to the updated upstream head.
+    rb = rebase
+
+    # rebase - continue the rebasing process after resolving a conflict manually and updating the index with the resolution.
+    rbc = rebase --continue
+
+    # rebase - restart the rebasing process by skipping the current patch.
+    rbs = rebase --skip
+
+    # rbi - rebase interactive on our unpushed commits.
+    #
+    # Before we push our local changes, we may want to do some cleanup,
+    # to improve our commit messages or squash related commits together.
+    #
+    # Let's say I've pushed two commits that are related to a new feature and
+    # I have another where I made a spelling mistake in the commit message.
+    # When I run "git rbi" I get dropped into my editor with this:
+    #
+    #     pick 7f06d36 foo
+    #     pick ad544d0 goo
+    #     pick de3083a hoo
+    #
+    # Let's say I want to squash the "foo" and "goo" commits together,
+    # and also change "hoo" to say "whatever". To do these, I change "pick"
+    # to say "s" for squash; this tells git to squash the two together;
+    # I also edit "hoo". I make the file look like:
+    #
+    #     pick 7f06d36 foo
+    #     s ad544d0 goo
+    #     r de3083a whatever
+    # This gives me two new commit messages to edit, which I update.
+    # Now when I push the remote repo host receives two commits
+    #
+    #     3400455 - foo
+    #     5dae0a0 - whatever
+    #
+    # NOTE: When you have a tracking branch set up, you can reference its
+    #       upstream branch with the @{upstream} or @{u} shorthand.
+    rbi = rebase --interactive @{upstream}
+
+    # Interactive rebase with the given number of latest commits (i.e. history rewriting before push)
+    reb = "!r() { git rebase --interactive HEAD~$1; }; r"
+
+    # Interactive rebase to a parent branch (i.e. history rewriting before push)
+    #rebb = "!r() { git rebase --interactive $(git merge-base HEAD ${1-dev}); }; r"
+
+    # See https://blog.filippo.io/git-fixup-amending-an-older-commit/
+    # This is a slightly modified version
+    fixup = "!f() { TARGET=$(git rev-parse \"$1\"); git commit --fixup=$TARGET && GIT_EDITOR=true git rebase --interactive --autosquash $TARGET~; }; f"
+
+    ### status ###
+
+    # status with short format instead of full details
+    ss = status --short
+
+    # status with short format and showing branch and tracking info.
+    ssb = status --short --branch
+
+    ### submodule ###
+
+    # submodule - enables foreign repositories to be embedded within a dedicated subdirectory of the source tree.
+    sm = submodule
+
+    # submodule update
+    smu = submodule update
+
+    # submodule update with initialize
+    smui = submodule update --init
+
+    # submodule update with initialize and recursive; this is useful to bring a submodule fully up to date.
+    smuir = submodule update --init --recursive
+
+    ### clean ###
+
+    # clean everything to be pristine
+    cleanest = clean -ffdx
+
+    ## diff ##
 
     # diff before add/commit
     d = difftool
@@ -37,6 +277,7 @@
 
     # Delete merged branches (dmb)
     dmb = "!git branch --merged | grep -v '\\*\\|dev\\|develop\\|master' | xargs -n 1 git branch -d"
+
     # Dry run of dmb
     dmbn = "!git branch --merged | grep -v '\\*\\|dev\\|develop\\|master' | xargs -n 1 echo"
 
@@ -78,71 +319,49 @@
     drb = "!f() { git remote prune ${1-origin}; }; f"
 
     #
-    # Show tags, remotes, aliases, status
+    # Show tags, remotes, aliases, contributors
     #
 
     # Show verbose output about tags
     tags = tag -l
+
     # Show verbose output about remotes
     remotes = remote -v
+
     # List all aliases in config
     alias = "!f() { git config --get-regexp '^alias.'; }; f"
+
     # List all aliases in config (cutting out 'alias.' part such that sorting is possible)
     aliases = "!git config -l | grep '^alias.' | cut -c 7- | sort"
 
-    # View the current working tree status using the short format
-    s = status -s
-
-    # Pull in remote changes for the current repository and all its submodules
-    p = !"git pull; git submodule foreach git pull origin master"
-
-    # Clone a repository including all submodules
-    c = clone --recursive
-
-    # Commit all changes
-    ca = !git add -A && git commit -av
-
-    # Switch to a branch, creating it (possibly as a local tracking branch) if necessary
-    go = "!f() { git checkout \"$1\" 2> /dev/null || git checkout -b \"$1\"; }; f"
-
-    # Switch to a feature branch, creating it (possibly as a local tracking branch) if necessary
-    gof = "!f() { \
-        branch_name="$1"; \
-        if [[ ! "$branch_name" =~ ^feature/.* ]]; then \
-            branch_name="feature/${branch_name}"; \
-        fi; \
-        git checkout \"${branch_name}\" 2> /dev/null || git checkout -b \"${branch_name}\"; \
-    }; f"
-
-    # Switch to a hotfix branch, creating it (possibly as a local tracking branch) if necessary
-    goh = "!f() { \
-        branch_name="$1"; \
-        if [[ ! "$branch_name" =~ ^hotfix/.* ]]; then \
-            branch_name="hotfix/${branch_name}"; \
-        fi; \
-        git checkout \"${branch_name}\" 2> /dev/null || git checkout -b \"${branch_name}\"; \
-    }; f"
-
-    # Switch to a support branch, creating it (possibly as a local tracking branch) if necessary
-    gos = "!f() { \
-        branch_name="$1"; \
-        if [[ ! "$branch_name" =~ ^support/.* ]]; then \
-            branch_name="support/${branch_name}"; \
-        fi; \
-        git checkout \"${branch_name}\" 2> /dev/null || git checkout -b \"${branch_name}\"; \
-    }; f"
-
-    # Amend the currently staged files to the latest commit
-    amend = commit --amend --reuse-message=HEAD
+    # List contributors with number of commits
+    contributors = shortlog --summary --numbered
 
     # Credit an author on the latest commit
     credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
 
-    # Interactive rebase with the given number of latest commits (i.e. history rewriting before push)
-    reb = "!r() { git rebase -i HEAD~$1; }; r"
+    ### grep ###
 
-    # Interactive rebase to a parent branch (i.e. history rewriting before push)
-    rebb = "!r() { git rebase -i $(git merge-base HEAD ${1-dev}); }; r"
+    # find text
+    g = grep
+
+    # grep and show line number
+    gl =  grep --line-number
+
+    # grep group: find text and group the output lines; a.k.a. `grep-group`.
+    gg = grep --break --heading --line-number
+
+    # Find text in any commit ever.
+    grep-all = !"f() { git rev-list --all | xargs git grep \"$@\"; }; f"
+
+    # Find text and group the output lines. Also aliased as `gg`.
+    grep-group = grep --break --heading --line-number
+
+    # grep with ack-like formatting
+    ack = -c color.grep.linenumber=\"bold yellow\" \
+            -c color.grep.filename=\"bold green\" \
+            -c color.grep.match=\"reverse yellow\" \
+            grep --break --heading --line-number
 
     # Find branches containing commit
     fb = "!f() { git branch -a --contains $1; }; f"
@@ -155,37 +374,6 @@
 
     # Find commits by commit message
     fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
-
-    # List contributors with number of commits
-    contributors = shortlog --summary --numbered
-
-    # Merge branch into current HEAD as distinct commit (no FF)
-    m = "!f() { git merge --no-ff --edit $1; }; f"
-
-    # merge feature branch into dev branch (TODO: Maybe 1) fetch initially,
-    # checking we are not behind, and 2) delete the remote feature branch,
-    # if it exists on github/upstream)
-    mfb = "!f() { \
-        branch_name="$1"; \
-        if [[ ! "$branch_name" =~ ^feature/.* ]]; then \
-            branch_name="feature/${branch_name}"; \
-        fi; \
-        git checkout dev && \
-        git merge --no-ff --edit "${branch_name}" && \
-        git branch -d "${branch_name}"; \
-    }; f"
-
-    # Merge GitHub pull request on top of the `master` branch
-    mpr = "!f() { \
-        if [ $(printf \"%s\" \"$1\" | grep '^[0-9]\\+$' > /dev/null; printf $?) -eq 0 ]; then \
-            git fetch origin refs/pull/$1/head:pr/$1 && \
-            git rebase master pr/$1 && \
-            git checkout master && \
-            git merge pr/$1 && \
-            git branch -D pr/$1 && \
-            git commit --amend -m \"$(git log -1 --pretty=%B)\n\nCloses #$1.\"; \
-        fi \
-    }; f"
 
 [apply]
 
@@ -302,3 +490,7 @@
 [user]
   name = maxild
   email = mmaxild@gmail.com
+
+# Display status of submodules when git status is invoked
+[status]
+	submoduleSummary = true
