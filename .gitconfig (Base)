@@ -20,7 +20,7 @@
     o = checkout
     p = pull
     r = remote
-    s = status
+    s = status --short
     w = whatchanged
 
     ### add ###
@@ -226,11 +226,12 @@
 
     ### status ###
 
-    # status with short format instead of full details
-    ss = status --short
+    # status with short format ignoring changes in submodules (can be either "untracked", "dirty" or "all").
+    #   * Using "dirty" ignores all changes to the work tree of submodules (this was the behavior before 1.7.0)
+    ss = status --short --ignore-submodules=dirty
 
     # status with short format and showing branch and tracking info.
-    ssb = status --short --branch
+    ssb = status --short --ignore-submodules=dirty --branch
 
     ### submodule ###
 
