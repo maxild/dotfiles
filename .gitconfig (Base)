@@ -253,6 +253,12 @@
     # Clone a git repository including all submodules
     cloner = clone --recursive
 
+    ### pull repo with submodules  ###
+
+    # fetch and prune, pull and rebase, then update submodules (git pull will fetch all submodules by default, but will not update submodules)
+    spull = '__git_spull() { git fetch --prune && git pull --rebase=preserve "$@" && git submodule sync --recursive && git submodule update --init --recursive; }; __git_spull'
+    spush = 'push --recurse-submodules=on-demand'
+
     ### clean ###
 
     # clean everything to be pristine
@@ -437,12 +443,19 @@
 
     # Detect copies as well as renames
     renames = copies
-
     tool = bcomp
+
+    # so you get clearer container diffs when referenced submodule commits changed
+    submodule = log
 
 [difftool]
 
     prompt = false
+
+[fetch]
+
+    # so you are confident new referenced commits for known submodules get fetched with container updates
+    recurseSubmodules = on-demand
 
 [help]
 
