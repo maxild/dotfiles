@@ -166,9 +166,6 @@
 
     ### pull ###
 
-    # Pull in remote changes for the current repository and all its submodules
-    #p = !"git pull; git submodule foreach git pull origin master"
-
     # pull if a merge can be resolved as a fast-forward, otherwise fail.
     pf = pull --ff-only
 
@@ -272,15 +269,12 @@
     # Show diff of a commit
     dc  = "!f() { git difftool "$1"^.."$1"; }; f"
 
-    # Fetch and have Git automatically prune all stale remote refs
-    f = "!f() { git fetch -p ${1-origin}; }; f"
-
     #
     # Locale branches
     #
 
     # A summary of all local branches with their tracking branch and status (ahead/behind)
-    b = "!f() { git fetch --all && git branch -vv; }; f "
+    bb = "!f() { git fetch --all && git branch -vv; }; f "
     branches = "!f() { git fetch --all && git branch -vv; }; f "
 
     # Cleanup local branches (current=HEAD, dev and master cannot be deleted)
@@ -354,9 +348,6 @@
 
     ### grep ###
 
-    # find text
-    g = grep
-
     # grep and show line number
     gl =  grep --line-number
 
@@ -386,6 +377,11 @@
 
     # Find commits by commit message
     fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+
+    ### workflow ###
+
+    # sync master, origin/master to upstream/master (in forked github repo using master as mainline)
+    syncm = "!f() { git fetch --all; git merge upstream/master; git push origin master; }; f"
 
 [apply]
 
