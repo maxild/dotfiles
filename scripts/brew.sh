@@ -97,6 +97,18 @@ brew install fswatch
 # installation method.
 #brew install node
 
+# .NET Core 1.x SDK requires OpenSSL when running on macOS
+
+# See https://github.com/dotnet/coreclr/blob/63766f74c4a641a274cd2933b9b7fd7bbddef2dd/Documentation/building/osx-instructions.md#openssl
+# brew install openssl # .NET Core requires the latest version of OpenSSL.
+# brew link --force openssl
+
+# See https://github.com/dotnet/docs/blob/master/docs/core/macos-prerequisites.md#net-core-1x-1
+# brew install openssl
+# mkdir -p /usr/local/lib
+# ln -s /usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib /usr/local/lib/
+# ln -s /usr/local/opt/openssl/lib/libssl.1.0.0.dylib /usr/local/lib/
+
 #
 brew install mono # Omnisharp requires mono support (Error: Cannot start Omnisharp because Mono version >=4.0.1 is required.)
 
