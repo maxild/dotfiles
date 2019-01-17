@@ -7,7 +7,7 @@
 #
 # To install nodies
 #      nave install 0.8.8
-# To unisntall nodies
+# To uninstall nodies
 #     nave uninstall 0.8.8
 # To use a version of node in a virtual environment
 #      nave use <version>
