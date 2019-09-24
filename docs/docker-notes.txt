@@ -1,0 +1,16 @@
+To see system info in windows (Win+R: Run menu)
+
+```
+msinfo32
+```
+
+To enable Hyper-V support for docker
+
+Open Powershell terminal as admin, then type
+
+```
+bcdedit /set hypervisorlaunchtype auto
+```
+
+and restart windows.
+
