@@ -8,7 +8,9 @@
 [credential]
 
   #  See https://stackoverflow.com/questions/13385690/how-to-use-git-with-gnome-keyring-integration
-  helper = /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
+  #helper = /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
+  # gnome keyring not working...use this less safe method where pwd is saved in clear text
+  helper = store --file ~/.my-credentials
 
 [difftool "bcomp"]
   trustExitCode = true
