@@ -12,7 +12,6 @@
     a = add
     b = branch
     c = commit
-    d = difftool
     f = fetch
     g = grep
     l = log

@@ -26,6 +26,11 @@
 
   editor = "'c:/Program Files/Sublime Text 3/sublime_text.exe' -n -w"
 
+
+[alias]
+
+  d = difftool
+
 [credential]
 # Git for Windows have 'manager' configured in --system, see above
 # Override 'manager' (Git Credential Manager for Windows) from --system
