@@ -11,7 +11,7 @@ buildFolder="$rootFolder/build"
 # files to build with platform dependent sections
 declare -a filesToBuild=(".hgrc" ".hgignore" ".gitconfig" ".gitignore")
 
-# running on Mac or Linux
+# running on Mac or Linux (platform dependent sections)
 unameOut="$(uname -s)"
 case "${unameOut}" in
     Linux*)     machine=Linux;;
