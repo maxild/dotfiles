@@ -1,4 +1,3 @@
-
 # Read about dotfiles projects at:
 # http://code.tutsplus.com/tutorials/setting-up-a-mac-dev-machine-from-zero-to-hero-with-dotfiles--net-35449
 
@@ -8,17 +7,22 @@ if [ -d "$HOME/bin" ]; then
 fi
 
 # ghc (Haskell compiler)
-if [ -d "$HOME/.stack/programs/x86_64-osx/ghc-7.10.3/bin" ]; then
-    export PATH="$HOME/.stack/programs/x86_64-osx/ghc-7.10.3/bin:$PATH";
-fi
+# if [ -d "$HOME/.stack/programs/x86_64-osx/ghc-7.10.3/bin" ]; then
+#     export PATH="$HOME/.stack/programs/x86_64-osx/ghc-7.10.3/bin:$PATH";
+# fi
+
 # hdevtools (Haskell devtools)
 if [ -d "$HOME/.local/bin" ]; then
     export PATH=~/.local/bin:$PATH;
 fi
 # cabal install places executables in ~/.cabal/bin
-if [ -d "$HOME/.cabal/bin" ]; then
-    export PATH=~/.cabal/bin:$PATH;
-fi
+# if [ -d "$HOME/.cabal/bin" ]; then
+#     export PATH=~/.cabal/bin:$PATH;
+# fi
+
+# BC4 support in WSL
+# See https://www.chenjianjx.com/miscellaneous-tips-while-developing-in-wsl-windows-subsystem-for-linux/
+export TMPDIR='/mnt/c/Users/Maxfire/AppData/Local/Temp'
 
 # Load the dotfiles:
 # * ~/.path can be used to extend `$PATH`.
