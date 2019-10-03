@@ -11,11 +11,21 @@ buildFolder="$rootFolder/build"
 # files to build with platform dependent sections
 declare -a filesToBuild=(".hgrc" ".hgignore" ".gitconfig" ".gitignore")
 
+# running on Mac or Linux
+unameOut="$(uname -s)"
+case "${unameOut}" in
+    Linux*)     machine=Linux;;
+    Darwin*)    machine=OSX;;
+    CYGWIN*)    machine=Cygwin;;
+    MINGW*)     machine=MinGw;;
+    *)          machine="UNKNOWN:${unameOut}"
+esac
+
 # concatenates base and platform specific files
 function build() {
   [[ -e "$buildFolder" ]] || mkdir "$buildFolder";
   for file in "${filesToBuild[@]}"; do
-    cat "$file (Base)" "$file (OSX)" > "${buildFolder}/$file"
+    cat "$file (Base)" "$file ($machine)" > "${buildFolder}/$file"
   done
 }
 

@@ -1,0 +1,19 @@
+[core]
+
+  # Tell Git to convert CRLF to LF on commit but not the other way around
+  # Note: We are using (global) .gitattributes files to specify end-of-line
+  # conversions, and therefore this setting will never be relevant!!!
+  autocrlf = input
+
+[credential]
+
+  #  See https://stackoverflow.com/questions/13385690/how-to-use-git-with-gnome-keyring-integration
+  helper = /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
+
+[difftool "bcomp"]
+  trustExitCode = true
+  cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE"
+
+[mergetool "bcomp"]
+  trustExitCode = true
+  cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"

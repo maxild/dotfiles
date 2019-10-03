@@ -1,0 +1,12 @@
+; See http://www.scootersoftware.com/support.php?zz=kb_vcs_osx
+
+[extdiff]
+cmd.bcomp = /usr/local/bin/bcomp
+#opts.bcomp = -ro
+
+[merge-tools]
+bcomp.executable = /usr/local/bin/bcomp
+bcomp.args = $local $other $base $output
+bcomp.priority = 1
+bcomp.premerge = True
+bcomp.gui = True
