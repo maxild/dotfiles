@@ -24,6 +24,11 @@ fi
 # See https://www.chenjianjx.com/miscellaneous-tips-while-developing-in-wsl-windows-subsystem-for-linux/
 export TMPDIR='/mnt/c/Users/Maxfire/AppData/Local/Temp'
 
+# Note: Bash on Windows does not currently apply umask properly.
+if [ "$(umask)" = "0000" ]; then
+  umask 0022
+fi
+
 # Load the dotfiles:
 # * ~/.path can be used to extend `$PATH`.
 # * ~/.extra can be used for other settings you don’t want to commit.
