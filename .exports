@@ -21,7 +21,8 @@ export LESS_TERMCAP_md="${yellow}";
 export MANPAGER="less -X";
 
 # Always enable colored `grep` output
-export GREP_OPTIONS="--color=auto";
+# TODO: grep: warning: GREP_OPTIONS is deprecated; please use an alias or script
+# export GREP_OPTIONS="--color=auto";
 
 # Install casks to sensible and predictable locations
 # See also https://github.com/caskroom/homebrew-cask/issues/6831
