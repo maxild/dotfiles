@@ -11,14 +11,14 @@ fi
 #     export PATH="$HOME/.stack/programs/x86_64-osx/ghc-7.10.3/bin:$PATH";
 # fi
 
-# hdevtools (Haskell devtools)
+# stack install places executables in ~/.cabal/bin
 if [ -d "$HOME/.local/bin" ]; then
     export PATH=~/.local/bin:$PATH;
 fi
 # cabal install places executables in ~/.cabal/bin
-# if [ -d "$HOME/.cabal/bin" ]; then
-#     export PATH=~/.cabal/bin:$PATH;
-# fi
+if [ -d "$HOME/.cabal/bin" ]; then
+    export PATH=~/.cabal/bin:$PATH;
+fi
 
 # BC4 support in WSL
 # See https://www.chenjianjx.com/miscellaneous-tips-while-developing-in-wsl-windows-subsystem-for-linux/
