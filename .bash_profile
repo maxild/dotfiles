@@ -20,6 +20,11 @@ if [ -d "$HOME/.cabal/bin" ]; then
     export PATH=~/.cabal/bin:$PATH;
 fi
 
+ # Nix package manager
+if [ -e /home/maxfire/.nix-profile/etc/profile.d/nix.sh ]; then
+    . /home/maxfire/.nix-profile/etc/profile.d/nix.sh;
+fi
+
 # BC4 support in WSL
 # See https://www.chenjianjx.com/miscellaneous-tips-while-developing-in-wsl-windows-subsystem-for-linux/
 export TMPDIR='/mnt/c/Users/Maxfire/AppData/Local/Temp'
