@@ -6,10 +6,17 @@ if [ -d "$HOME/bin" ]; then
     export PATH="$HOME/bin:$PATH";
 fi
 
-# ghc (Haskell compiler)
-# if [ -d "$HOME/.stack/programs/x86_64-osx/ghc-7.10.3/bin" ]; then
-#     export PATH="$HOME/.stack/programs/x86_64-osx/ghc-7.10.3/bin:$PATH";
-# fi
+# ghc/ghci (Haskell compiler) from ppa (https://launchpad.net/~hvr/+archive/ubuntu/ghc)
+# See also https://www.haskell.org/downloads/linux/
+if [ -d "/opt/ghc/bin" ]; then
+    export PATH="/opt/ghc/bin:$PATH";
+fi
+
+# cabal from ppa (https://launchpad.net/~hvr/+archive/ubuntu/ghc)
+# See also https://www.haskell.org/downloads/linux/
+if [ -d "/opt/cabal/bin" ]; then
+    export PATH="/opt/cabal/bin:$PATH";
+fi
 
 # stack install places executables in ~/.cabal/bin
 if [ -d "$HOME/.local/bin" ]; then
