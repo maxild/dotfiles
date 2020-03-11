@@ -6,6 +6,11 @@ if [ -d "$HOME/bin" ]; then
     export PATH="$HOME/bin:$PATH";
 fi
 
+# ghcup environment setup: $HOME/.cabal/bin and $HOME/.ghcup/bin are added to path
+if [ -f "$HOME/.ghcup/env" ]; then
+    source "$HOME/.ghcup/env"
+fi
+
 # ghc/ghci (Haskell compiler) from ppa (https://launchpad.net/~hvr/+archive/ubuntu/ghc)
 # See also https://www.haskell.org/downloads/linux/
 if [ -d "/opt/ghc/bin" ]; then
@@ -21,10 +26,6 @@ fi
 # stack install places executables in ~/.cabal/bin
 if [ -d "$HOME/.local/bin" ]; then
     export PATH=~/.local/bin:$PATH;
-fi
-# cabal install places executables in ~/.cabal/bin
-if [ -d "$HOME/.cabal/bin" ]; then
-    export PATH=~/.cabal/bin:$PATH;
 fi
 
  # Nix package manager
