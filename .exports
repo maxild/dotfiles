@@ -28,3 +28,9 @@ export MANPAGER="less -X";
 # See also https://github.com/caskroom/homebrew-cask/issues/6831
 # Note: Remember to "sudo chown -R $(whoami) /etc/Caskroom" in order to avoid permission denied.
 export HOMEBREW_CASK_OPTS="--appdir=/Applications --caskroom=/etc/Caskroom"
+
+# $TMPDIR defined in windows must be changed in order for ghcup to work
+if [[ "$TMPDIR" =~ ^/mnt/c/ ]]; then
+    export TMPDIR="/tmp"
+fi
+
