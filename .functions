@@ -1,3 +1,54 @@
+function load-secrets() {
+
+	# Credits: https://www.madboa.com/geek/openssl/#how-do-i-base64-encode-something
+
+	path="$HOME/.secrets"
+
+	# passphrase file
+	passphrase_filename="my-silly-password.txt"
+	passphrase_path="$path/$passphrase_filename"
+
+	github_pwd_filename="github-pwd.enc"
+	github_pwd_path="$path/$github_pwd_filename"
+
+	github_grm_token_filename="github-gitreleasemanager-token.enc"
+	github_grm_token_path="$path/$github_grm_token_filename"
+
+	appveyor_access_token_filename="appveyor-access-token.enc"
+	appveyor_access_token_path="$path/$appveyor_access_token_filename"
+
+	brf_nuget_apikey_filename="brf-nuget-apikey.enc"
+	brf_nuget_apikey_path="$path/$brf_nuget_apikey_filename"
+
+	# github_password
+	if [[ -f $github_pwd_path && -f $passphrase_path ]]; then
+		export GITHUB_PASSWORD=$(openssl enc -d -aes-256-cbc -in $github_pwd_path -pass file:$passphrase_path)
+	else
+		printf "The github_password environment variable could not be resolved -- you most first generate an encrypted file"
+	fi
+
+	# github_access_token
+	if [[ -f $github_grm_token_path && -f $passphrase_path ]]; then
+		export GITHUB_ACCESS_TOKEN=$(openssl enc -d -aes-256-cbc -in $github_grm_token_path -pass file:$passphrase_path)
+	else
+		printf "The github_access_token environment variable could not be resolved -- you most first generate an encrypted file"
+	fi
+
+	# AppVeyor_AccessToken
+	if [[ -f $appveyor_access_token_path && -f $passphrase_path ]]; then
+		export APPVEYOR_ACCESSTOKEN=$(openssl enc -d -aes-256-cbc -in $appveyor_access_token_path -pass file:$passphrase_path)
+	else
+		printf "The AppVeyor_AccessToken environment variable could not be resolved -- you most first generate an encrypted file"
+	fi
+
+	# Brf_NuGet_ApiKey
+	if [[ -f $brf_nuget_apikey_path && -f $passphrase_path ]]; then
+		export BRF_NUGET_APIKEY=$(openssl enc -d -aes-256-cbc -in $brf_nuget_apikey_path -pass file:$passphrase_path)
+	else
+		printf "The Brf_NuGet_ApiKey environment variable could not be resolved -- you most first generate an encrypted file"
+	fi
+}
+
 # Simple calculator
 function calc() {
 	local result="";
