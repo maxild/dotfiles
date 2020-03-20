@@ -38,6 +38,7 @@ This function should only modify configuration layer settings."
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
+     agda
      auto-completion
      better-defaults
      emacs-lisp
@@ -211,6 +212,7 @@ It should only modify the values of Spacemacs settings."
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
       dotspacemacs-themes '(odersky
+                            gruvbox-dark-medium
                             zenburn
                             spacemacs-dark
                             spacemacs-light)
@@ -513,6 +515,60 @@ before packages are loaded."
 
     ;; (require 'company-lsp)
     ;; (push 'company-lsp company-backends)
+
+    ;; lsp-ui-sideline:
+    ;; Show informations of the symbols on the current line. It also show flycheck
+    ;; diagnostics and LSP code actions
+    (setq lsp-ui-sideline-show-code-actions nil     ;; show diagnostics messages in sideline
+          lsp-ui-sideline-show-hover nil            ;; show hover messages in sideline
+          lsp-ui-sideline-show-code-actions t)      ;; show code actions in sideline
+
+    ;; lsp-ui-doc
+    ;; Show object documentation at point in a child frame.
+    ;;(setq lsp-ui-doc-enable nil) ;; disable hovering info boxes, use ", ." instead (see below)
+
+    ;; lsp-ui-imenu
+    ;; show imenu entries
+
+    (setq lsp-ui-doc-enable t
+    lsp-ui-doc-use-childframe t
+    lsp-ui-doc-position 'top
+    lsp-ui-doc-include-signature t
+    lsp-ui-sideline-enable nil
+    lsp-ui-flycheck-enable t
+    lsp-ui-flycheck-list-position 'right
+    lsp-ui-flycheck-live-reporting t
+    lsp-ui-peek-enable t
+    lsp-ui-peek-list-width 60
+    lsp-ui-peek-peek-height 25)
+
+    ;;(setq lsp-ui-mode-enable nil)
+
+    ;; keybindings defined by https://gist.github.com/sevanspowell/23b0135dae2834e59904a502b8a0eb5d
+    (evil-leader/set-key-for-mode 'haskell-mode "gm" 'lsp-ui-imenu)
+    (evil-leader/set-key-for-mode 'haskell-mode "gg" 'lsp-ui-peek-find-definitions)
+    (evil-leader/set-key-for-mode 'haskell-mode "gr" 'lsp-ui-peek-find-references)
+    (evil-leader/set-key-for-mode 'haskell-mode "en" 'flycheck-next-error)
+    (evil-leader/set-key-for-mode 'haskell-mode "ep" 'flycheck-previous-error)
+    (evil-leader/set-key-for-mode 'haskell-mode "el" 'flycheck-list-errors)
+    (evil-leader/set-key-for-mode 'haskell-mode "ee" 'flycheck-explain-error-at-point)
+    (evil-leader/set-key-for-mode 'haskell-mode "rR" 'lsp-rename)
+    (evil-leader/set-key-for-mode 'haskell-mode "rf" 'lsp-format-buffer)
+    (evil-leader/set-key-for-mode 'haskell-mode "ra" 'lsp-ui-sideline-apply-code-actions)
+    (evil-leader/set-key-for-mode 'haskell-mode "lr" 'lsp-restart-workspace)
+    (evil-leader/set-key-for-mode 'haskell-mode "," 'completion-at-point)
+    (evil-leader/set-key-for-mode 'haskell-mode "." 'lsp-describe-thing-at-point)
+
+    ;; Setup emacs for use with Agda
+    (load-file (let ((coding-system-for-read 'utf-8))
+               (shell-command-to-string "agda-mode locate")))
+
+    (setq auto-mode-alist
+      (append
+        '(("\\.agda\\'" . agda2-mode)
+         ("\\.lagda.md\\'" . agda2-mode))
+      auto-mode-alist)
+    )
 
     ;; See
     (defun fira-code-mode--make-alist (list)
