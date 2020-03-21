@@ -65,7 +65,7 @@ This function should only modify configuration layer settings."
      ;; spell-checking
      ;; syntax-checking
      ;; version-control
-     treemacs
+     (treemacs :variables treemacs-use-follow-mode 'tag)
      osx
      )
 
@@ -211,11 +211,20 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-      dotspacemacs-themes '(odersky
-                            gruvbox-dark-medium
-                            zenburn
-                            spacemacs-dark
-                            spacemacs-light)
+   dotspacemacs-themes '(alect-light
+                         odersky
+                         gruvbox-dark-medium
+                         zenburn
+                         sanityinc-tomorrow-night
+                         sanityinc-tomorrow-bright
+                         darkburn
+                         dakrone
+                         tsdh-dark
+                         gruvbox
+                         distinguished
+                         alect-dark
+                         spacemacs-dark
+                         spacemacs-light)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -231,10 +240,20 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-colorize-cursor-according-to-state t
 
    ;; Default font or prioritized list of fonts.
-   dotspacemacs-default-font '("Source Code Pro"
-                               :size 15
-                               :weight normal
-                               :width normal)
+  ;;  dotspacemacs-default-font '("Source Code Pro"
+  ;;                              :size 15
+  ;;                              :weight normal
+  ;;                              :width normal)
+
+   dotspacemacs-default-font (let ((fonts '("DejaVu Sans Mono" "Source Code Pro" "mononoki")))
+                            (mapcar (lambda (font)
+                                      `(,font
+                                        :size 16
+                                        :weight normal
+                                        :width normal
+                                        :powerline-scale 1.5))
+                                    fonts))
+
 
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
@@ -264,7 +283,7 @@ It should only modify the values of Spacemacs settings."
    ;; and TAB or `C-m' and `RET'.
    ;; In the terminal, these pairs are generally indistinguishable, so this only
    ;; works in the GUI. (default nil)
-   dotspacemacs-distinguish-gui-tab nil
+   dotspacemacs-distinguish-gui-tab t
 
    ;; Name of the default layout (default "Default")
    dotspacemacs-default-layout-name "Default"
@@ -333,7 +352,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-maximized-at-startup t
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
    ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
@@ -384,7 +403,7 @@ It should only modify the values of Spacemacs settings."
    ;;   :size-limit-kb 1000)
    ;; When used in a plist, `visual' takes precedence over `relative'.
    ;; (default nil)
-   dotspacemacs-line-numbers nil
+   dotspacemacs-line-numbers t
 
    ;; Code folding method. Possible values are `evil' and `origami'.
    ;; (default 'evil)
@@ -441,7 +460,7 @@ It should only modify the values of Spacemacs settings."
    ;; %z - mnemonics of buffer, terminal, and keyboard coding systems
    ;; %Z - like %z, but including the end-of-line format
    ;; (default "%I@%S")
-   dotspacemacs-frame-title-format "%I@%S"
+   dotspacemacs-frame-title-format "%f"
 
    ;; Format specification for setting the icon title format
    ;; (default nil - same as frame-title-format)
@@ -452,7 +471,7 @@ It should only modify the values of Spacemacs settings."
    ;; `trailing' to delete only the whitespace at end of lines, `changed' to
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
    ;; (default nil)
-   dotspacemacs-whitespace-cleanup nil
+   dotspacemacs-whitespace-cleanup 'trailing
 
    ;; If non nil activate `clean-aindent-mode' which tries to correct
    ;; virtual indentation of simple modes. This can interfer with mode specific
@@ -500,21 +519,36 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
+
+    ;; Evil style: Use evil-leader/set-key to bind keys in the leader map.
+    ;; See also https://github.com/cofi/evil-leader
+    ;; Evil-Leader keybindings defined (namespaced) by a leader key that initiates a
+    ;; key sequence – the “SPC” in Spacemacs and usually mapped to “,” in Vim.
+
+    ;; Experimental
+    ;; global keybindings for all major/minor modes
+    (evil-leader/set-key
+    "," 'find-file
+    "." 'other-window
+    ;;"b" 'switch-to-buffer
+    ;;"k" 'kill-buffer
+    "0" 'treemacs
+    "1" 'delete-other-windows
+    "2" 'split-window-below
+    "3" 'split-window-right
+    ;;"w" 'enlarge-window-horizontally
+    ;;"t" (lambda () (interactive) (enlarge-window 5))
+    )
+
+    ;; editorconfig is awesome
+    (editorconfig-mode 1)
+
     ;; indicator for the 80th column
     (spacemacs/toggle-fill-column-indicator-on)
 
-    ;; REPL is stuck workaround
-    (when (configuration-layer/layer-used-p 'haskell)
-        (add-hook 'haskell-interactive-mode-hook
-            (lambda ()
-                (setq-local evil-move-cursor-back nil))))
-
-    ;; (setq lsp-haskell-process-path-hie "hie-wrapper")
-    ;; (require 'lsp-haskell)
-    ;; (add-hook 'haskell-mode-hook #'lsp)
-
-    ;; (require 'company-lsp)
-    ;; (push 'company-lsp company-backends)
+    ;;
+    ;; LSP
+    ;;
 
     ;; lsp-ui-sideline:
     ;; Show informations of the symbols on the current line. It also show flycheck
@@ -544,6 +578,23 @@ before packages are loaded."
 
     ;;(setq lsp-ui-mode-enable nil)
 
+    ;;
+    ;; Haskell
+    ;;
+
+    ;; REPL is stuck workaround
+    (when (configuration-layer/layer-used-p 'haskell)
+        (add-hook 'haskell-interactive-mode-hook
+            (lambda ()
+                (setq-local evil-move-cursor-back nil))))
+
+    ;; (setq lsp-haskell-process-path-hie "hie-wrapper")
+    ;; (require 'lsp-haskell)
+    ;; (add-hook 'haskell-mode-hook #'lsp)
+
+    ;; (require 'company-lsp)
+    ;; (push 'company-lsp company-backends)
+
     ;; keybindings defined by https://gist.github.com/sevanspowell/23b0135dae2834e59904a502b8a0eb5d
     (evil-leader/set-key-for-mode 'haskell-mode "gm" 'lsp-ui-imenu)
     (evil-leader/set-key-for-mode 'haskell-mode "gg" 'lsp-ui-peek-find-definitions)
@@ -559,7 +610,10 @@ before packages are loaded."
     (evil-leader/set-key-for-mode 'haskell-mode "," 'completion-at-point)
     (evil-leader/set-key-for-mode 'haskell-mode "." 'lsp-describe-thing-at-point)
 
-    ;; Setup emacs for use with Agda
+    ;;
+    ;; Agda
+    ;;
+
     (load-file (let ((coding-system-for-read 'utf-8))
                (shell-command-to-string "agda-mode locate")))
 
@@ -570,7 +624,12 @@ before packages are loaded."
       auto-mode-alist)
     )
 
-    ;; See
+    (evil-leader/set-key-for-mode 'agda2-mode "mu" 'describe-char)
+
+    ;;
+    ;; Fira Code (ligaturas)
+    ;;
+
     (defun fira-code-mode--make-alist (list)
         "Generate prettify-symbols alist from LIST."
         (let ((idx -1))
