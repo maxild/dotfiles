@@ -103,6 +103,10 @@ This function should only modify configuration layer settings."
 This function is called at the very beginning of Spacemacs startup,
 before layer configuration.
 It should only modify the values of Spacemacs settings."
+  ;; spacemacs is configured to use "df", I prefer jk (right-handed)
+  (setq-default
+    evil-escape-key-sequence "jk"
+    evil-escape-unordered-key-sequence "true")
   ;; This setq-default sexp is an exhaustive list of all the supported
   ;; spacemacs settings.
   (setq-default
