@@ -1,0 +1,395 @@
+{ config, pkgs, ... }:
+
+let
+  zgen-zsh = ./zsh/zgen.zsh;
+  zsh-autoload = ./zsh/autoload;
+in
+{
+  system.defaults.NSGlobalDomain.AppleKeyboardUIMode = 3;
+  system.defaults.NSGlobalDomain.ApplePressAndHoldEnabled = false;
+  system.defaults.NSGlobalDomain.InitialKeyRepeat = 10;
+  system.defaults.NSGlobalDomain.KeyRepeat = 1;
+  system.defaults.NSGlobalDomain.NSAutomaticCapitalizationEnabled = false;
+  system.defaults.NSGlobalDomain.NSAutomaticDashSubstitutionEnabled = false;
+  system.defaults.NSGlobalDomain.NSAutomaticPeriodSubstitutionEnabled = false;
+  system.defaults.NSGlobalDomain.NSAutomaticQuoteSubstitutionEnabled = false;
+  system.defaults.NSGlobalDomain.NSAutomaticSpellingCorrectionEnabled = false;
+  system.defaults.NSGlobalDomain.NSNavPanelExpandedStateForSaveMode = true;
+  system.defaults.NSGlobalDomain.NSNavPanelExpandedStateForSaveMode2 = true;
+  system.defaults.NSGlobalDomain._HIHideMenuBar = true;
+
+  system.defaults.dock.autohide = true;
+  system.defaults.dock.mru-spaces = false;
+  system.defaults.dock.orientation = "left";
+  system.defaults.dock.showhidden = true;
+
+  system.defaults.finder.AppleShowAllExtensions = true;
+  system.defaults.finder.QuitMenuItem = true;
+  system.defaults.finder.FXEnableExtensionChangeWarning = false;
+
+  system.defaults.trackpad.Clicking = true;
+  system.defaults.trackpad.TrackpadThreeFingerDrag = true;
+
+  system.keyboard.enableKeyMapping = true;
+  system.keyboard.remapCapsLockToControl = true;
+
+  # This is already possible by overriding bashInteractive but overlays can cause unintended rebuilds,
+  # a package option would avoid that.
+  nixpkgs.overlays = [
+    (self: super: {
+      bashInteractive = super.bashInteractive_5;
+    })
+  ];
+
+  # List packages installed in system profile. To search by name, run:
+  # $ nix-env -qaP | grep wget
+  # The directory /run/current-system/sw/bin, is where symlinks to binaries of
+  # packages specified in your ~/.nixpkgs/darwin-configuration.nix will be
+  # created (not in ~/.nix-profile/bin)
+  environment.systemPackages =
+    [
+      pkgs.fzf
+      pkgs.fasd
+      pkgs.gnupg
+      pkgs.bashInteractive_5 # bash with ncurses support
+      pkgs.bash-completion
+      pkgs.zsh
+      # Can't get these to work...
+      #pkgs.zsh-syntax-highlighting # https://github.com/zsh-users/zsh-syntax-highlighting/
+      #pkgs.zsh-autosuggestions     # https://github.com/zsh-users/zsh-autosuggestions/
+      #pkgs.oh-my-zsh               # https://github.com/ohmyzsh/ohmyzsh/
+      # ...Or these...
+      #pkgs.darwin-zsh-completions
+      #pkgs.nix-zsh-completions
+      #pkgs.zsh-syntax-highlighting
+      pkgs.git
+      pkgs.gitAndTools.gh
+      pkgs.gitAndTools.hub
+      pkgs.vim
+      # pkgs.neovim
+      pkgs.curlFull
+      pkgs.wget
+      pkgs.zlib
+      pkgs.diffutils
+      pkgs.findutils
+      pkgs.tree
+      pkgs.ripgrep
+      pkgs.gnused
+      pkgs.grc
+      # pkgs.coreutils
+      pkgs.coreutils-full
+      # pkgs.util-linux
+      pkgs.yarn
+      pkgs.openssl
+      pkgs.nano
+      pkgs.ncurses
+      # pkgs.nix-info
+      pkgs.rsync
+      pkgs.which
+      pkgs.perl
+      pkgs.nano
+      pkgs.dos2unix
+      pkgs.speedtest-cli
+      pkgs.p7zip
+      pkgs.screen
+      pkgs.pkg-config
+      pkgs.automake
+      pkgs.gettext
+      pkgs.shellcheck
+      pkgs.brotli
+      pkgs.ctags
+      pkgs.tmux
+      pkgs.direnv
+      pkgs.jq
+      # pkgs.fira-code
+      # pkgs.entr
+      # pkgs.htop
+      # pkgs.kitty
+      # pkgs.mosh
+      # pkgs.silver-searcher
+      # pkgs.vault
+      # pkgs.youtube-dl
+
+      # pkgs.qes
+      # pkgs.awscli
+      # pkgs.pgcli
+      # pkgs.tig
+      # pkgs.bat
+      # pkgs.jansson
+      #
+      # pkgs.httpie
+      # pkgs.global
+      # pkgs.fd
+      # pkgs.readline
+      # pkgs.antibody
+      # pkgs.exa
+      # pkgs.htop
+      # pkgs.mosh
+      # pkgs.sbt
+      # pkgs.coursier
+      # pkgs.ammonite
+      # pkgs.bloop
+      # pkgs.xz
+      # pkgs.mdbook
+      # pkgs.ranger
+      # pkgs.exercism
+      # pkgs.niv
+    ];
+
+  # Use a custom configuration.nix location.
+  # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
+  # environment.darwinConfig = "$HOME/.config/nixpkgs/darwin/configuration.nix";
+
+  # nix.nixPath =
+  # [ # Use local nixpkgs checkout instead of channels.
+  #   "darwin-config=$HOME/.nixpkgs/darwin-configuration.nix"
+  #   "darwin=$HOME/Projects/nix-darwin"
+  #   "nixpkgs=$HOME/Projects/nixpkgs"
+  # ];
+
+  # Auto upgrade nix package and the daemon service.
+  services.nix-daemon.enable = true;
+  nix.package = pkgs.nix;
+
+  # TODO: Is this needed?
+  environment.shells = with pkgs; [ bashInteractive zsh ];
+
+  #
+  # Fonts
+  #
+
+  # fonts = {
+  #   enableFontDir = true;
+  #   fonts = [ pkgs.fira-code ];
+  # };
+
+  #
+  # Shell: 3 methods
+  #    * A
+  #    * B
+  #    * C (oh-my-zsh)
+  # NOTE: We start by using C (A and B commented out)
+
+  # Method A
+
+  # Problem: you might need to change the directory ownership/rights.
+  #   Run compaudit
+  #     sudo chown -R $(whoami):admin /nix/store # 'root:staff' is another option
+  #     sudo chown -R 755 /nix/store
+
+  # Shell
+  programs.bash.enable = false;
+  programs.zsh = {
+    enable = true;
+    enableCompletion = false; # too slow, we'll manully manage this
+    promptInit = ""; # use zgen to load the prompt package (it's faster than promptinit)
+    interactiveShellInit = ''
+      # Turn on when measuring plugin performance
+      # zmodload zsh/zprof
+      HISTSIZE=10000
+      SAVEHIST=10000
+      bindkey -v # vi mode
+      setopt autocd # auto cd when only path is entered
+      setopt nomatch # throw an error on glob matching nothing
+      fpath=($fpath "${zsh-autoload}")
+      autoload -Uz fasd_cd
+      if [ -f "${zgen-zsh}" ]; then
+        source "${zgen-zsh}" # ~25ms
+      fi
+      if [ -n "$(command -v zgen)" ]; then
+        if ! zgen saved; then # TODO: auto invalidate on build
+          echo "========== Creating a zgen save =========="
+          # plugins
+          zgen load zsh-users/zsh-autosuggestions # <10ms
+          zgen load zdharma/fast-syntax-highlighting # ~20ms
+          zgen load zsh-users/zsh-history-substring-search # ~5ms
+          zgen oh-my-zsh plugins/shrink-path # ~2ms
+          zgen load junegunn/fzf shell # ~2ms
+          zgen load mafredri/zsh-async
+          zgen load sindresorhus/pure
+          zgen load andrewferrier/fzf-z
+          #zgen oh-my-zsh plugins/tmux
+          # save all to init script
+          zgen save
+        fi
+      fi
+      # vim undo dir
+      mkdir -p $HOME/.vim/undodir
+      # fasd: add zsh hook (same as eval "$(fasd --init zsh-hook)")
+      _fasd_preexec() {
+        { eval "fasd --proc $(fasd --sanitize $2)"; } >> "/dev/null" 2>&1
+      }
+      autoload -Uz add-zsh-hook
+      add-zsh-hook preexec _fasd_preexec
+    '';
+  };
+  programs.nix-index.enable = true;
+
+  # Method B
+
+  # programs.zsh.enable = true;
+  # programs.zsh.enableBashCompletion = true;
+  # programs.zsh.enableFzfCompletion = true;
+  # programs.zsh.enableFzfGit = true;
+  # programs.zsh.enableFzfHistory = true;
+  # # programs.zsh.enableSyntaxHighlighting = true;
+
+  # # TODO: Wait for configuration to there
+  # #programs.zsh.variables.cfg = "$HOME/.config/nixpkgs/darwin/configuration.nix";
+  # programs.zsh.variables.darwin = "$HOME/.nix-defexpr/darwin";
+  # programs.zsh.variables.nixpkgs = "$HOME/.nix-defexpr/nixpkgs";
+
+  # programs.zsh.promptInit = ''
+  #   autoload -U promptinit && promptinit
+  #   setopt PROMPTSUBST
+  #   _prompt_nix() {
+  #     [ -z "$IN_NIX_SHELL" ] || echo "%F{yellow}%B[''${name:+$name}]%b%f "
+  #   }
+  #   PS1='%F{red}%B%(?..%? )%b%f%# '
+  #   RPS1='$(_prompt_nix)%F{green}%~%f'
+  #   if [ -n "$IN_NIX_SANDBOX" ]; then
+  #     PS1+='%F{red}[sandbox]%f '
+  #   fi
+  # '';
+
+  # programs.zsh.interactiveShellInit = ''
+  #   setopt AUTOCD AUTOPUSHD
+  #   autoload -U down-line-or-beginning-search
+  #   autoload -U up-line-or-beginning-search
+  #   bindkey '^[[A' down-line-or-beginning-search
+  #   bindkey '^[[A' up-line-or-beginning-search
+  #   zle -N down-line-or-beginning-search
+  #   zle -N up-line-or-beginning-search
+  # '';
+
+  # Method C: oh-my-zsh
+
+  # Use https://nixos.org/nixos/options.html#programs.zsh
+
+  # programs.zsh = {
+  #   enable = true;
+  #   # Both autosuggestion and syntax highlighting can be added in programs.zsh
+  #   # without using plugins for them, they will just get sourced.
+  #   # That is 'zsh-syntax-highlighting' and 'zsh-autosuggestions' does need to be added to plugins
+  #   #syntaxHighlighting.enable = true;
+  #   #autosuggestions.enable = true;
+
+  #   # Simple `fzf` wrapper which provides a way nicer interface for ZSH's
+  #   # <C-r> search. When using oh-my-zsh it can be enabled like this:
+  #   # ohMyZsh = {
+  #   #   enable = true;
+  #   #   customPkgs = [ pkgs.fzf-zsh ];
+  #   #   plugins = [ "fzf-zsh" ];
+  #   # };
+
+  #   # We define these in the interactiveShellInit below
+  #   ohMyZsh.enable = true;
+  #   # ohMyZsh.plugins = [ "git"
+  #   #                     "dotenv"
+  #   #                     "osx" ];
+  #   # ohMyZsh.theme = "robbyrussell";   # ZSH_THEME
+  #   # ohMyZsh.custom                    # ZSH_CUSTOM
+  #   # ohMyZsh.cacheDir                  # ZSH_CACHE_DIR
+
+  #   promptInit = ""; # Clear this to avoid a conflict with oh-my-zsh
+
+  #   ##  ZSH Configuration  ##
+  #   interactiveShellInit = ''
+  #     export ZSH=${pkgs.oh-my-zsh}/share/oh-my-zsh/
+
+  #     ZSH_THEME="robbyrussell"
+
+  #     plugins=(
+  #       git
+  #       dotenv
+  #       osx
+  #       #zsh-syntax-highlighting
+  #       #zsh-autosuggestions
+  #       #last-working-dir
+  #       #web-search
+  #     )
+
+  #     source $ZSH/oh-my-zsh.sh
+  #     # source $ZSH/zsh-autosuggestions/zsh-autosuggestions.zsh
+  #     # source $ZSH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  #   '';
+  # };
+
+  # tmux
+
+  # programs.tmux = {
+  #   enable = true;
+  #   enableSensible = true;
+  #   enableMouse = true;
+  #   enableFzf = true;
+  #   enableVim = true;
+  #   tmuxConfig = ''
+  #     #set-option -g prefix2 M-Escape
+  #     #bind-key M-Escape send-prefix -2
+  #     #setw -g aggressive-resize off
+  #     bind 0 set status
+  #     bind S choose-session
+  #     bind-key -r "<" swap-window -t -1
+  #     bind-key -r ">" swap-window -t +1
+  #     bind-key -n M-c run "tmux send-keys -t .+ C-\\\\ && tmux send-keys -t .+ C-a C-k C-l Up && tmux send-keys -t .+ Enter"
+  #     bind-key -n M-r run "tmux send-keys -t .+ C-a C-k C-l Up && tmux send-keys -t .+ Enter"
+  #     #bind-key -n M-r run "tmux send-keys -t .+ C-l Up Enter"
+  #     #bind-key -n M-R run "tmux send-keys -t $(hostname -s | awk -F'-' '{print tolower($NF)}') C-l Up Enter"
+  #     set -g pane-active-border-style fg=black
+  #     set -g pane-border-style fg=black
+  #     set -g status-bg black
+  #     set -g status-fg white
+  #     set -g status-right '#[fg=white]#(id -un)@#(hostname)   #(cat /run/current-system/darwin-version)'
+  #   '';
+  # };
+
+  #
+  # Environment
+  #
+
+  # environment.systemPath = [
+  #   "$HOME/.npm/bin"
+  # ];
+
+  environment.variables = {
+    # EDITOR = "nvim";
+    FZFZ_RECENT_DIRS_TOOL = "fasd";
+    #OH_MY_ZSH = [ "${pkgs.oh-my-zsh}/share/oh-my-zsh" ];
+  };
+
+  environment.variables.LANG = "en_US.UTF-8";
+
+  environment.shellAliases.g = "git log --pretty=color -32";
+  environment.shellAliases.gb = "git branch";
+  environment.shellAliases.gc = "git checkout";
+  environment.shellAliases.gcb = "git checkout -B";
+  environment.shellAliases.gd = "git diff --minimal --patch";
+  environment.shellAliases.gf = "git fetch";
+  environment.shellAliases.ga = "git log --pretty=color --all";
+  environment.shellAliases.gg = "git log --pretty=color --graph";
+  environment.shellAliases.gl = "git log --pretty=nocolor";
+  environment.shellAliases.grh = "git reset --hard";
+  environment.shellAliases.l = "ls -lh";
+
+  environment.extraInit = ''
+    # Load and export variables from environment.d.
+    if [ -d /etc/environment.d ]; then
+        set -a
+        . /etc/environment.d/*
+        set +a
+    fi
+  '';
+
+  #
+  # Standard epilogue
+  #
+
+  # Used for backwards compatibility, please read the changelog before changing.
+  # $ darwin-rebuild changelog
+  system.stateVersion = 4;
+
+  # You should generally set this to the total number of logical cores in your system.
+  # $ sysctl -n hw.ncpu
+  nix.maxJobs = 8;
+  nix.buildCores = 1;
+}

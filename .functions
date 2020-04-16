@@ -314,18 +314,15 @@ function shell() {
 
 # set default shell to bash
 function use_bash() {
-	#chsh -s $(which bash);
-	# http://apple.stackexchange.com/questions/24632/is-it-safe-to-upgrade-bash-via-homebrew
-	#chsh -s /usr/local/bin/bash;
-	if [[ ! $(echo $SHELL) == /usr/local/bin/bash ]]; then
-        chsh -s /usr/local/bin/bash
+	if [[ ! $(echo $SHELL) == $(which bash) ]]; then
+		chsh -s $(which bash) $(whoami)
     fi
 }
 
 # set default shell to zsh
 function use_zsh() {
 	if [[ ! $(echo $SHELL) == $(which zsh) ]]; then
-        chsh -s $(which zsh)
+        chsh -s $(which zsh) $(whoami)
     fi
 }
 

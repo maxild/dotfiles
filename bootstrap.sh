@@ -82,6 +82,7 @@ function doIt() {
   # Array to build --excludes options for rsync
   local -a excludes=(
     ".git/"
+    ".editorconfig"
     "/{$joinedFilesToBuild}*"
     ".DS_Store"
     "/{build,scripts,docs}/"

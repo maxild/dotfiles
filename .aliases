@@ -22,7 +22,6 @@ alias p="cd ~/Projects"
 alias g="git"
 alias h="history"
 alias j="jobs"
-alias rb=rbenv
 
 # ST3 data directory aliases
 if [[ -e "$HOME/Library/Application Support/Sublime Text 3" ]]; then
@@ -65,9 +64,6 @@ alias week='date +%V'
 
 # Stopwatch
 alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
-
-# Get OS X Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
-alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update'
 
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"

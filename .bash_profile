@@ -28,10 +28,19 @@ if [ -d "$HOME/.local/bin" ]; then
     export PATH=~/.local/bin:$PATH;
 fi
 
- # Nix package manager
-if [ -e /home/maxfire/.nix-profile/etc/profile.d/nix.sh ]; then
-    . /home/maxfire/.nix-profile/etc/profile.d/nix.sh;
-fi
+# Test with: > nix-shell -p nix-info --run "nix-info -m"
+# Nix package manager
+# if [ -e /home/maxfire/.nix-profile/etc/profile.d/nix.sh ]; then
+#     . /home/maxfire/.nix-profile/etc/profile.d/nix.sh;
+# fi
+
+# Nix Package Manager
+#if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then source $HOME/.nix-profile/etc/profile.d/nix.sh; fi
+# Completions
+#if [ -e $HOME/.nix-profile/etc/profile.d/bash_completion.sh ]; then source $HOME/.nix-profile/etc/profile.d/bash_completion.sh; fi
+#if [ -e $HOME/.nix-profile/etc/bash_completion.d/git-completion.bash ]; then source $HOME/.nix-profile/etc/bash_completion.d/git-completion.bash; fi
+#export XDG_DATA_DIRS="$HOME/.nix-profile/share/:$XDG_DATA_DIRS"
+
 
 # BC4 support in WSL
 # See https://www.chenjianjx.com/miscellaneous-tips-while-developing-in-wsl-windows-subsystem-for-linux/
@@ -64,11 +73,6 @@ unset file;
 # Installed by running install-deps.sh
 if [[ -e "$HOME/dev/z/z.sh" ]]; then
   source ~/dev/z/z.sh
-fi
-
-# Enable shims and autocompletion in rbenv (after 'brew install rbenv ruby-build')
-if which rbenv > /dev/null; then
-  eval "$(rbenv init -)";
 fi
 
 # generic colouriser (http://kassiopeia.juls.savba.sk/~garabik/software/grc.html)
