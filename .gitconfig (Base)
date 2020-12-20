@@ -508,3 +508,9 @@
 # Display status of submodules when git status is invoked
 [status]
 	submoduleSummary = true
+
+# ghq: 'ghq' provides a way to organize remote repository clones, like go get does.
+# See also https://github.com/x-motemen/ghq
+[ghq]
+    vcs = git
+    root = ~/repos
