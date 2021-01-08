@@ -1,4 +1,27 @@
+# Dynamic linking -- debugging, fixing load errors
+
+See https://discourse.nixos.org/t/libgl-undefined-symbol-glxgl-core-functions/512
+
+## Linux
+
+When looking for a shared library, the dynamic linker(ld.so) checks the paths listed in DT_RPATH (unless DT_RUNPATH Is set) , the paths listed in the environment variable LD_LIBRARY_PATH, the paths listed in DT_RUNPATH, the libraries listed in /etc/ld.so.cache, and finally /usr/lib and /lib.  It checks in that order and takes the first library found.  At least on my linux box, LD_LIBRARY_PATH does NOT override the paths in DT_RPATH even though the documentation implies that it does.   LD_LIBRARY_PATH does override DT_RUNPATH.
+
+## Darwin
+
+When looking for shared libraries, the dynamic linker (dyld) first scans the directories in DYLD_LIBRARY_PATH, then checks the location in the install name (which is per library), and finally checks the standard locations.
+
+DYLD_LIBRARY_PATH successfully overrides the the path embedded in the executable.
+
+Caveat 1: LD_LIBRARY_PATH has no runtime impact, but it does impact where the static linker looks for share libraries.  It looks first in the directories specified using -L, the the directories in LD_LIBRARY_PATH, and finally in /lib, /usr/lib, & /usr/local/lib.  This is particularly confusing  because many configure scripts seem to ignore LD_LIBRARY_PATH and you can get inconsistent results from configure and gcc/ld on whether a library is present.
+Caveat 2: Mac OS X has a set of compiler/linker switches for dealing with Frameworks (packages of shared libraries and include files).  These are installed outside the typical *nix directory structure.  These switches act like -I (to gcc) and -L (to ld).  If you end up totally confused about where to find something, read up on this.  The OpenGL and OpenAL headers and libraries are in Frameworks, for example.
+
+## Windows
+
+See https://gitlab.haskell.org/ghc/ghc/-/wikis/shared-libraries/management
+
 # Installing Nix Package manager on Ubuntu
+
+## Keyboard
 
 The Ubuntu 18.04 LTS is running inside virtual box on a macbook
 
@@ -7,6 +30,45 @@ In the terminal of the Ubuntu type this to fix keyboard issue with tilde and bac
 ```bash
 setxkbmap -option apple:badmap
 ```
+
+The above should be added to ~/.profile
+
+## Source this script
+
+Finally, for your convenience, the installer modified ~/.profile to automatically enter
+the Nix environment. What `~/.nix-profile/etc/profile.d/nix.sh` really does is simply to
+add `~/.nix-profile/bin` to PATH and `~/.nix-defexpr/channels/nixpkgs` to NIX_PATH. We'll discuss NIX_PATH later.
+
+```bash
+. ~/.nix-profile/etc/profile.d/nix.sh
+```
+
+Read nix.sh, it's short.
+
+## Default shell
+
+Setting the default shell
+
+```bash
+command -v zsh | sudo tee -a /etc/shells
+sudo chsh -s "$(command -v zsh)" "$USER"
+echo $SHELL
+```
+
+This requires a restart before $SHELL is changes to `/home/maxfire/.nix-profile/bin/zsh`.
+
+## .profile in zsh
+
+You can add this to your `.zshrc` file suh that .profile is shared between bash and zsh.
+Otherwise use .zprofile if they should not be shared.
+
+```
+[[ -e ~/.profile ]] && emulate sh -c 'source ~/.profile'
+```
+
+* `.profile` is for env variables. Executed once
+* `.bash_profile` is bash specific profile, and .zprofile is zsh specfic
+* `.bashrc` and .zshrc are called for every shell/subshell.
 
 # Installing Nix package manager on windows
 

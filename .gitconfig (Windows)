@@ -24,8 +24,15 @@
   # conversions, and therefore this setting will never be relevant!!!
   autocrlf = true
 
-  editor = "'c:/Program Files/Sublime Text 3/sublime_text.exe' -n -w"
+  # Git has a limit of 4096 characters for a filename, except on Windows when
+  # Git is compiled with msys. It uses an older version of the Windows API and
+  # there's a limit of 260 characters for a filename.
+  # TODO: Remove when Domus no longer has AspNetCore-Tooling submodule
+  longpaths = true
 
+  editor = code --wait
+  #editor = code --new-window --wait
+  #editor = "'C:/Users/%USERNAME%/AppData/Local/Programs/Microsoft VS Code/bin/code.cmd' --new-window --wait"
 
 [alias]
 
