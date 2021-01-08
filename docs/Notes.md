@@ -2,7 +2,7 @@
 
 The Ubuntu 18.04 LTS is running inside virtual box on a macbook
 
-In the terminal of the Ubuntu type this to fix keyboard issue wity tilde and backtick.
+In the terminal of the Ubuntu type this to fix keyboard issue with tilde and backtick.
 
 ```bash
 setxkbmap -option apple:badmap
@@ -918,6 +918,10 @@ $ ls -la  ~/.nix-defexpr/channels/darwin
 ```
 
 # Links
+
+https://nix.dev/
+
+https://www.youtube.com/playlist?list=PLRGI9KQ3_HP_OFRG6R-p4iFgMSK1t5BHs
 
 https://discourse.nixos.org/
 
