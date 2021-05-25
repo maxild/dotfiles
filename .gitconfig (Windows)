@@ -34,6 +34,10 @@
   #editor = code --new-window --wait
   #editor = "'C:/Users/%USERNAME%/AppData/Local/Programs/Microsoft VS Code/bin/code.cmd' --new-window --wait"
 
+  # We use the Windows 10 implementation of OpenSSH (git config --global core.sshCommand C:/Windows/System32/OpenSSH/ssh.exe)
+  # see also https://gist.github.com/danieldogeanu/16c61e9b80345c5837b9e5045a701c99
+  sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
+
 [alias]
 
   d = difftool
