@@ -6,6 +6,14 @@
 #     [http]
 #         sslCAInfo = C:/Program Files/Git/mingw64/ssl/certs/ca-bundle.crt
 #         sslBackend = openssl
+#
+#         NOTE: Cloning of
+#           'https://jbtfs.corp.jyskebank.net/tfs/BRFkredit/Application.Laaneberegninger/_git/Application.Laaneberegninger'
+#         requires
+#
+#         git config --global http.sslBackend schannel
+#         sslBackend = schannel
+#
 #     [diff "astextplain"]
 #         textconv = astextplain
 #     [filter "lfs"]
