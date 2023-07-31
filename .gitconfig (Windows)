@@ -23,6 +23,9 @@
 #         required = true
 #     [credential]
 #         helper = manager
+#
+# See also https://github.com/git-ecosystem/git-credential-manager/issues/1325
+# See also https://stackoverflow.com/questions/23885449/unable-to-resolve-unable-to-get-local-issuer-certificate-using-git-on-windows
 
 [core]
 
@@ -53,7 +56,14 @@
 [credential]
 # Git for Windows have 'manager' configured in --system, see above
 # Override 'manager' (Git Credential Manager for Windows) from --system
-helper = wincred
+#    helper = wincred
+# If you use wincred for credential.helper, git is using the standard Windows Credential Manager
+# to store your credentials (legitimationsoplysninger in da-DK Windows).
+#
+# Use to inspect credential manager settings
+#   $ git config --show-origin --get-all credential.helper
+# Use to unset all (except the GCM version bundled in Git for Windows -- file:C:/Program Files/Git/etc/gitconfig manager)
+#   $ git config --global --unset-all credential.helper
 
 [difftool "bcomp"]
   # Git For Windows v2.2+ has built-in configuration for Beyond Compare 4
