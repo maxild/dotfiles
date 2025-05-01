@@ -14,14 +14,22 @@
 #         $ git config --global http.sslBackend schannel
 #         sslBackend = schannel
 #
+#         $ git config --show-origin http.sslbackend
+#
 # Remote "devops" does not support the Git LFS locking API. Consider disabling it with:
 #
 # The following also works and will apply to any repository:
 #     [lfs]
 #          locksverify = false
 # In your global git config file, you can do something like this to be specific to a domain
-#     [lfs https://jbtfs.corp.jyskebank.net/tfs/BRFkredit/Realkreditprodukter/_git/Lofus.git/info/lfs]
+#     [lfs "https://jbtfs.corp.jyskebank.net/tfs/BRFkredit/Realkreditprodukter/_git/Lofus.git/info/lfs"]
 #          locksverify = false
+#     [lfs "https://jbtfs.corp.jyskebank.net/tfs/BRFkredit/Realkreditprodukter/_git/Lofus.git/info/lfs"]
+#          access = negotiate
+#          locksverify = false
+#
+#         $ git config --show-origin lfs.https://jbtfs.corp.jyskebank.net/tfs/BRFkredit/Realkreditprodukter/_git/Lofus.git/info/lfs.locksverify
+#         $ git config --show-origin lfs.locksverify
 #
 #         $ git config --global lfs.locksverify false
 #         $ git config lfs.locksverify false
