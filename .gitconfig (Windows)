@@ -18,6 +18,11 @@
 #
 # Remote "devops" does not support the Git LFS locking API. Consider disabling it with:
 #
+#         $ git lfs ls-files -n
+#         # See filter=lfs (configures a git filter, which calls git-lfs to convert between pointer files and the actual blobs. )
+#         # The command git lfs track '*.xls*' adds the following line to the .gitattributes file in the repo.
+#         $ cat .\.gitattributes
+#         *.xls* filter=lfs diff=lfs merge=lfs -text*.xls* filter=lfs diff=lfs merge=lfs -text
 # The following also works and will apply to any repository:
 #     [lfs]
 #          locksverify = false
@@ -38,11 +43,25 @@
 #
 #     [diff "astextplain"]
 #         textconv = astextplain
+#
+# The command git lfs install configures a git filter, which calls git-lfs to
+# convert between pointer files and the actual blobs. This filter configuration
+# lives in your git config (e.g. at ~/.gitconfig) and applies to all your repos.
 #     [filter "lfs"]
 #         clean = git-lfs clean -- %f
 #         smudge = git-lfs smudge -- %f
 #         process = git-lfs filter-process
 #         required = true
+#
+# If you prefer not to run these hooks all the time, you can uninstall them with
+# git lfs uninstall after finishing your work on an LFS git repo.
+#      $ git config --global filter.lfs.required true
+#      $ git config --global filter.lfs.clean "git-lfs clean -- %f"
+#      $ git config --global filter.lfs.smudge "git-lfs smudge -- %f"
+#      $ git config --global filter.lfs.process "git-lfs filter-process"
+# Then you won’t have to initialize LFS every time you clone a repository.
+# See also https://shuhrat.github.io/programming/git-lfs-tips-and-tricks.html
+#
 #     [credential]
 #         helper = manager
 #
