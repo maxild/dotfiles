@@ -11,8 +11,22 @@
 #           'https://jbtfs.corp.jyskebank.net/tfs/BRFkredit/Application.Laaneberegninger/_git/Application.Laaneberegninger'
 #         requires
 #
-#         git config --global http.sslBackend schannel
+#         $ git config --global http.sslBackend schannel
 #         sslBackend = schannel
+#
+# Remote "devops" does not support the Git LFS locking API. Consider disabling it with:
+#
+# The following also works and will apply to any repository:
+#     [lfs]
+#          locksverify = false
+# In your global git config file, you can do something like this to be specific to a domain
+#     [lfs https://jbtfs.corp.jyskebank.net/tfs/BRFkredit/Realkreditprodukter/_git/Lofus.git/info/lfs]
+#          locksverify = false
+#
+#         $ git config --global lfs.locksverify false
+#         $ git config lfs.locksverify false
+#         $ git config --global lfs.https://jbtfs.corp.jyskebank.net/tfs/BRFkredit/Realkreditprodukter/_git/Lofus.git/info/lfs.locksverify false
+#         $ git config lfs.https://jbtfs.corp.jyskebank.net/tfs/BRFkredit/Realkreditprodukter/_git/Lofus.git/info/lfs.locksverify false
 #
 #     [diff "astextplain"]
 #         textconv = astextplain
