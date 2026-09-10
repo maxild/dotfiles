@@ -466,9 +466,46 @@
 
     tool = bcomp
 
+    # Tip: Use this log command
+    #       git log --merge -p <name of file>
+    # to further inspect all of the commits that touched a file in between
+    # the common ancestor and the two heads you are merging.
+    # See https://stackoverflow.com/questions/27417656/should-diff3-be-default-conflictstyle-on-git
+    #     https://psung.blogspot.com/2011/02/reducing-merge-headaches-git-meets.html
+    # Git inserts way better text decoration of hunks to see 'our-head', 'merge-base'
+    # and 'their-head'
+    # <<<<<<< HEAD
+    # THIS IS USEFUL
+    # ||||||| merged common ancestors
+    # This is useful
+    # =======
+    # This is really useful
+    # >>>>>>> c2392943.....
+    conflictstyle = diff3
+
 [mergetool]
 
     prompt = false
+
+[rerere]
+
+    # (Re)use (re)corded (re)solution (repeated merge conflicts can be avoided)
+    # Git remembers how you resolved a conflict and auto-applies that resolution
+    # the next time it sees the same conflict. You resolve it once, and future merges
+    # handle it without you.
+    # On a future merge with the same conflict, git auto-resolves it and tells you:
+    #        Resolved using previous resolution.
+    # You just git add . and git merge --continue.
+    # Its not magic — it only works when the conflict hunk is byte-for-byte
+    # identical to a previous one. But when you have recurring branch conflicts
+    # (release branches, long-lived feature branches that rebase onto main),
+    # it hits often enough to matter:-)
+    # If the conflict text changes (different surrounding context, refactored
+    # file), rerere wont match it. Its not a substitute for understanding what
+    # you are merging.
+    # See https://stackoverflow.com/questions/49500943/what-is-git-rerere-and-how-does-it-work
+    # https://dev.to/schiff_heimlich/git-rerere-the-feature-you-didnt-know-you-needed-383o
+    enabled = true
 
 [push]
     # push the current branch back to the branch whose changes are usually integrated
