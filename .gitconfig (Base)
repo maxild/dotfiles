@@ -264,11 +264,17 @@
 
     ## diff ##
 
-    # Show diff of last commit (or the given number of commits ago)
-    dlc = "!f() { git difftool --cached HEAD~$1; }; f"
+    # Show diff of the last single commit (or a previous single commit a number of commits ago)
+    dlc = "!f() { git difftool HEAD~${1-0}^ HEAD~${1-0}; }; f"
+    dlc-files = "!f() { git diff --name-status HEAD~${1-0}^ HEAD~${1-0}; }; f"
 
-    # Show diff of a commit
-    dc  = "!f() { git difftool "$1"^.."$1"; }; f"
+    # Show diff of a single commit
+    dc  = "!f() { git difftool "$1"^ "$1"; }; f"
+    dc-files = "!f() { git diff --name-status "$1"^ "$1"; } f"
+
+    # Show diff of (feature) branch compared with merge-base
+    db = "!f() { git difftool $(git merge-base HEAD ${1-dev}); }; f"
+    db-files = "!f() { git diff --name-status $(git merge-base HEAD ${1-dev}); }; f"
 
     #
     # Locale branches
